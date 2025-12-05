@@ -1,4 +1,4 @@
-print ("\nInsert title of the program.\n")
+print ("\nGuimaras Path Finder.\n")
 
 # initialize variable INF with the value of positive infinity
 INF = float('inf')
