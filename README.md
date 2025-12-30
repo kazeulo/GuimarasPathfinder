@@ -20,19 +20,19 @@ Each point (1–15) in the program represents a specific destination, and the di
 
 ## Features
 
-### ✔ 1. Display a Specific Path
+### 1. Display a Specific Path
 
 Shows the shortest path and total distance from one destination to another.
 
-### ✔ 2. Display All Paths
+### 2. Display All Paths
 
 Displays all shortest paths between all destination pairs.
 
-### ✔ 3. Nearest Neighbor Tour
+### 3. Nearest Neighbor Tour
 
 Creates a simple tour that visits all destinations once by always choosing the closest next point.
 
-### ✔ 4. Exit
+### 4. Exit
 
 Closes the program.
 
