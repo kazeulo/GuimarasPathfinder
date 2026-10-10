@@ -11,10 +11,8 @@ It has two goals:
   fits the time available.
 * **For the SP:** show how the method works, and let anyone check that the results reproduce the SP's.
 
-> **What has been verified, and what hasn't.** The *algorithm* is verified: its results (the shortest distances and the Jordan Wharf
-> tour) match the SP's tables, checked by automated tests. The *website* is not: its pages, map layout, timetables and behaviour on
-> different devices have not been independently reviewed or tested with real users. Treat it as a guide, not a guarantee. The
-> distances and time estimates are the SP's own and have not been re-measured.
+> **Please note.** The calculations are verified: they give the same results as the SP. This website is not verified. It has not
+> been formally checked or tested, so please use it as a guide only.
 
 ## The web app
 
