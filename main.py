@@ -1,104 +1,119 @@
-from floyd import (
-    INF, vertices, matrix, find_shortest_path
+from floyd import INF, vertices, matrix, find_shortest_path
+
+RED, GREEN, YELLOW, CYAN, RESET = (
+    "\033[91m", "\033[92m", "\033[93m", "\033[96m", "\033[0m"
 )
 
-# VALIDATE USER INPUT
+
+def fmt_path(path):
+    """Format a 0-based vertex list as 1-based labels."""
+    return " -> ".join(str(v + 1) for v in path)
+
+
 def get_valid_vertex(prompt):
+    """Prompt until the user enters a vertex number in 1..vertices."""
     while True:
         try:
             n = int(input(prompt))
-            if 1 <= n <= vertices:
-                return n
-            print("\033[91mInvalid number. Enter 1–15.\033[0m")
         except ValueError:
-            print("\033[91mPlease enter a valid integer.\033[0m")
+            print(f"{RED}Please enter a valid integer.{RESET}")
+            continue
+        if 1 <= n <= vertices:
+            return n
+        print(f"{RED}Invalid number. Enter 1–{vertices}.{RESET}")
 
 
-# NEAREST NEIGHBOR TOUR
-def nearest_neighbor_tour(return_to_start=True):
-    start = 0
-    unvisited = set(range(vertices))
-    unvisited.remove(start)
+def nearest_neighbor_tour(start=0, return_to_start=True):
+    """Greedy tour over all vertices using shortest-path distances.
 
+    Returns (path, total), or (path, None) if some vertex is unreachable.
+    """
+    unvisited = set(range(vertices)) - {start}
     path = [start]
 
     while unvisited:
         curr = path[-1]
-
-        next_vertex = min(
-            unvisited,
-            key=lambda v: matrix[curr][v] if matrix[curr][v] != INF else float('inf')
-        )
-
-        if matrix[curr][next_vertex] == INF:
-            break
-
-        path.append(next_vertex)
-        unvisited.remove(next_vertex)
+        nxt = min(unvisited, key=lambda v: matrix[curr][v])
+        if matrix[curr][nxt] == INF:
+            return path, None
+        path.append(nxt)
+        unvisited.remove(nxt)
 
     if return_to_start:
+        if matrix[path[-1]][start] == INF:
+            return path, None
         path.append(start)
 
-    total = sum(matrix[path[i]][path[i+1]] for i in range(len(path) - 1))
+    total = sum(matrix[a][b] for a, b in zip(path, path[1:]))
     return path, total
 
-# MAIN MENU LOOP
+
+def show_specific_path():
+    start = get_valid_vertex(f"Start point (1–{vertices}): ") - 1
+    end = get_valid_vertex(f"End point (1–{vertices}): ") - 1
+
+    if start == end:
+        print(f"{CYAN}Path:{RESET} {start + 1}")
+        print(f"{CYAN}Distance:{RESET} 0.00 km")
+        return
+
+    path = find_shortest_path(start, end)
+    if path:
+        print(f"{CYAN}Path:{RESET} {fmt_path(path)}")
+        print(f"{CYAN}Distance:{RESET} {matrix[start][end]:.2f} km")
+    else:
+        print(f"{RED}No path found.{RESET}")
+
+
+def show_all_paths():
+    print(f"\n{CYAN}All Shortest Paths (in km):\n{RESET}")
+    for i in range(vertices):
+        for j in range(vertices):
+            if i != j and matrix[i][j] != INF:
+                print(
+                    f"{i + 1} → {j + 1}: {fmt_path(find_shortest_path(i, j))} "
+                    f"(Distance: {matrix[i][j]:.2f} km)"
+                )
+
+
+def show_nn_tour():
+    path, total = nearest_neighbor_tour(return_to_start=True)
+    print(f"\n{CYAN}Nearest Neighbor Tour (with return):{RESET}")
+    print(fmt_path(path))
+    if total is None:
+        print(f"{RED}Tour incomplete: some vertices are unreachable.{RESET}")
+    else:
+        print(f"{CYAN}Total Distance:{RESET} {total:.2f} km")
+
+
+ACTIONS = {
+    "1": show_specific_path,
+    "2": show_all_paths,
+    "3": show_nn_tour,
+}
+
+
 def menu():
     while True:
-        print("\n\033[93m=============================\033[0m")
-        print("  \033[92mGUIMARAS PATH FINDER MENU\033[0m")
-        print("\033[93m=============================\033[0m")
+        print(f"\n{YELLOW}============================={RESET}")
+        print(f"  {GREEN}GUIMARAS PATH FINDER MENU{RESET}")
+        print(f"{YELLOW}============================={RESET}")
         print("1. Display a specific path")
         print("2. Display all shortest paths")
         print("3. Nearest Neighbor Tour (with return)")
         print("4. Exit\n")
 
-        choice = input("Your choice: ")
+        choice = input("Your choice: ").strip()
 
-        # ---------------- OPTION 1 ----------------
-        if choice == "1":
-            start = get_valid_vertex("Start point (1–15): ") - 1
-            end = get_valid_vertex("End point (1–15): ") - 1
-
-            path = find_shortest_path(start, end)
-
-            if path:
-                print("\033[96mPath:\033[0m", " -> ".join(str(x + 1) for x in path))
-                print("\033[96mDistance:\033[0m {:.2f} km".format(matrix[start][end]))
-            else:
-                print("\033[91mNo path found.\033[0m")
-
-        # ---------------- OPTION 2 ----------------
-        elif choice == "2":
-            print("\n\033[96mAll Shortest Paths (in km):\n\033[0m")
-
-            for i in range(vertices):
-                for j in range(vertices):
-                    if i != j and matrix[i][j] != INF:
-                        path = find_shortest_path(i, j)
-                        print(
-                            f"{i+1} → {j+1}: "
-                            f"{' -> '.join(str(p+1) for p in path)} "
-                            f"(Distance: {matrix[i][j]:.2f} km)"
-                        )
-
-        # ---------------- OPTION 3 ----------------
-        elif choice == "3":
-            path, total = nearest_neighbor_tour(return_to_start=True)
-
-            print("\n\033[96mNearest Neighbor Tour (with return):\033[0m")
-            print(" -> ".join(str(x + 1) for x in path))
-            print("\033[96mTotal Distance:\033[0m {:.2f} km".format(total))
-
-        # ---------------- OPTION 4 ----------------
-        elif choice == "4":
-            print("\033[92mExiting...\033[0m")
+        if choice == "4":
+            print(f"{GREEN}Exiting...{RESET}")
             break
-
-        # ---------------- INVALID ----------------
+        action = ACTIONS.get(choice)
+        if action:
+            action()
         else:
-            print("\033[91mInvalid choice. Try again.\033[0m")
+            print(f"{RED}Invalid choice. Try again.{RESET}")
 
 
-# Run menu
-menu()
+if __name__ == "__main__":
+    menu()
