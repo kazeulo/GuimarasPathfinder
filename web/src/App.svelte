@@ -1,0 +1,77 @@
+<script lang="ts">
+  import { engine } from './algo'
+  import { ENTRIES, PRESETS, REPO_URL, selectionOf, type EntryKey } from './data'
+  import type { Model } from './model'
+  import AboutPage from './pages/AboutPage.svelte'
+  import HowPage from './pages/HowPage.svelte'
+  import PlanPage from './pages/PlanPage.svelte'
+
+  type Page = 'plan' | 'how' | 'about'
+
+  const NAV: { page: Page; label: string }[] = [
+    { page: 'plan', label: 'Plan a trip' },
+    { page: 'how', label: 'How it works' },
+    { page: 'about', label: 'About' },
+  ]
+
+  const pageFromHash = (): Page => {
+    const h = window.location.hash.replace('#', '')
+    return h === 'how' || h === 'about' ? h : 'plan'
+  }
+
+  let page = $state<Page>(pageFromHash())
+  let entryKey = $state<EntryKey>('wharf')
+  // a sensible trip is ready from the start, so nobody faces an empty screen
+  let selected = $state<boolean[]>(selectionOf(PRESETS[0].nodes))
+
+  // switching the starting point re-runs Floyd–Warshall for that port's road network
+  const model: Model = $derived({
+    entryKey,
+    entry: ENTRIES[entryKey],
+    fw: engine.floydWarshall(ENTRIES[entryKey].graph),
+  })
+
+  const setEntryKey = (k: EntryKey) => {
+    entryKey = k
+  }
+  const setSelected = (s: boolean[]) => {
+    selected = s
+  }
+  const onHashChange = () => {
+    page = pageFromHash()
+    window.scrollTo(0, 0)
+  }
+</script>
+
+<svelte:window onhashchange={onHashChange} />
+
+<div class="app">
+  <header class="site-head">
+    <a class="brand" href="#plan">Guimaras <span>Pathfinder</span></a>
+    <nav aria-label="Main">
+      {#each NAV as n (n.page)}
+        <a href="#{n.page}" aria-current={page === n.page ? 'page' : undefined}>{n.label}</a>
+      {/each}
+    </nav>
+  </header>
+
+  <main>
+    {#if page === 'plan'}
+      <div class="hero">
+        <h1>Plan a day in Guimaras</h1>
+        <p>Pick where you start and the places you want to see. We&rsquo;ll find a short route and tell you how long it takes.</p>
+      </div>
+      <PlanPage {model} {setEntryKey} {selected} {setSelected} />
+    {:else if page === 'how'}
+      <HowPage {model} {selected} {setSelected} />
+    {:else}
+      <AboutPage />
+    {/if}
+  </main>
+
+  <footer class="site-foot">
+    <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
+      View the source on GitHub<span class="sr-only"> (opens in a new tab)</span>
+    </a>
+  </footer>
+</div>

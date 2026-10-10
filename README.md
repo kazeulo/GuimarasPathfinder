@@ -1,78 +1,90 @@
 # Guimaras Pathfinder
 
-[GitHub repository](https://github.com/kazeulo/GuimarasPathfinder)
+Plan a day around Guimaras's most popular places, and see how the route is worked out.
 
-An interactive companion to the SP **"Application of Floyd–Warshall Algorithm in Optimizing Tour Route for Selected Tourist
-Destinations in Guimaras Province"** (Bernardo, Lozada & Manejo, University of the Philippines Visayas, 2023).
+Guimaras Pathfinder is an interactive version of an undergraduate special problem (SP): **"Application of Floyd–Warshall
+Algorithm in Optimizing Tour Route for Selected Tourist Destinations in Guimaras Province"** by Bernardo, Lozada and Manejo
+(University of the Philippines Visayas, 2023). It has two purposes:
 
-It has two goals:
-
-* **For visitors:** plan a day around 14 of Guimaras's most-visited places, with a route, clock times, and a check on whether it
-  fits the time available.
-* **For the SP:** show how the method works, and let anyone check that the results reproduce the SP's.
+* **For visitors:** pick where you start and the places you want to see, and get a route with clock times and a check on whether it
+  fits the time you have.
+* **For the SP:** show how its method works, step by step, in plain language.
 
 > **Please note.** The calculations are verified: they give the same results as the SP. This website is not verified. It has not
 > been formally checked or tested, so please use it as a guide only.
 
-## The web app
+## Run it
 
-Three pages, written for non-technical readers:
-
-| Page | What it does |
-|---|---|
-| **Plan a trip** | Choose where you start (Jordan Wharf or Jordan RoRo Port) and the places you want to see. Get a timetable with driving and staying time, and whether it fits your day. |
-| **How it works** | Plain-language, animated walkthrough of the two methods, with a collapsed section for technical readers. |
-| **About** | The SP, the data sources, and a live table comparing this app's results with the SP's printed numbers. |
-
-### Run it
-
-Requires Node.js 20.19+ (or 22.12+).
+You need [Node.js](https://nodejs.org) 20.19 or newer (22.12+ also works).
 
 ```bash
 cd web
 npm install
-npm run dev      # http://localhost:5173
-npm test         # engine, SP-reproduction and page tests
-npm run build    # production build in web/dist
+npm run dev
 ```
 
-See [`web/README.md`](web/README.md) for the code structure and troubleshooting.
+Then open **http://localhost:5173**. Stop it with `Ctrl+C`.
 
-## How it works, in short
+Other commands, also run from `web/`:
 
-1. **Floyd–Warshall** finds the shortest road distance between *every* pair of the 15 places (the port plus 14 destinations),
-   even where no direct road exists. It does this by repeatedly asking whether going through a third place is quicker.
-2. **Nearest Neighbor** builds a tour: start at the port, always drive to the closest place not yet visited, and return to the port.
-   It is a quick rule of thumb, not a guarantee of the absolute shortest order.
-3. Driving time assumes a constant 40 km/h; time at each place is the SP's estimate by type of place.
+| Command | What it does |
+|---|---|
+| `npm test` | Runs the automated tests |
+| `npm run check` | Type and accessibility check |
+| `npm run build` | Builds the finished site into `web/dist`, ready to host anywhere that serves static files |
+| `npm run preview` | Serves the built site locally |
 
-## Does it reproduce the SP?
+If `npm install` fails with *"Cannot find native binding"*, see the troubleshooting note in [`web/README.md`](web/README.md).
 
-* All 225 shortest distances match Table 4.1 (Jordan Wharf) and Table 4.2 (Jordan RoRo Port). This is tested automatically.
-* The Jordan Wharf tour matches exactly: 118.85 km and 2 h 58.28 min of driving.
-* Two printed totals in the SP do not agree with its own tables, and the app flags them:
-  * the Jordan RoRo tour is printed as 118.95 km, but Table 4.2 (1.3 km out + 19.8 km back) gives **119.05 km**;
-  * the whole-trip time is printed as 20 h 58.85 min, but the stay times in Table 3.5 add up to 19 h, so driving plus staying is
+## What's in the app
+
+| Page | What it does |
+|---|---|
+| **Plan a trip** | Choose where you start (Jordan Wharf or Jordan RoRo Port) and the places to visit. You get a timetable with driving and staying time at each stop, and whether it fits your day. |
+| **How it works** | A plain-language, animated walkthrough of the two methods behind the route, with a collapsed section for technical readers. |
+| **About** | The SP, where the data comes from, and what has and hasn't been verified. |
+
+## How the route is worked out
+
+1. **Floyd–Warshall** finds the shortest road distance between *every* pair of the 15 places (the port plus 14 destinations), even
+   where no direct road exists. It repeatedly asks whether going through a third place would be quicker.
+2. **Nearest Neighbor** builds the tour: start at the port, always drive to the closest place not yet visited, then return to the
+   port. It is a quick rule of thumb, not a guarantee of the absolute shortest order.
+3. Driving time assumes a steady 40 km/h. Time at each place is the SP's estimate for that type of place.
+
+## How it compares with the SP
+
+* All 225 shortest distances match the SP's Table 4.1 (Jordan Wharf) and Table 4.2 (Jordan RoRo Port), checked by automated tests.
+* The Jordan Wharf tour matches exactly: 118.85 km, or 2 h 58.28 min of driving.
+* Two totals printed in the SP don't agree with its own tables. This app uses the figures the tables add up to:
+  * the Jordan RoRo tour is printed as 118.95 km, but Table 4.2 (1.3 km out and 19.8 km back) gives **119.05 km**;
+  * the whole trip is printed as 20 h 58.85 min, but the stay times in Table 3.5 add up to 19 h, so driving plus staying is
     **21 h 58.28 min**.
 
-## Repository layout
+## Project layout
 
 | Folder | What it is |
 |---|---|
-| [`web/`](web/) | The React + TypeScript + Vite web app. |
-| [`python/`](python/) | The original command-line program from the SP's Appendix B. Kept as the reference implementation. |
+| [`web/`](web/) | The website, built with Svelte, TypeScript and Vite. See [`web/README.md`](web/README.md) for the code structure. |
+| [`python/`](python/) | The original command-line program from the SP's appendix, kept as the reference implementation. |
 
-### The Python command-line program
+### The Python program
 
 ```bash
 python python/main.py
 ```
 
-A menu to (1) show the shortest path between two places, (2) list all shortest paths, (3) build a Nearest Neighbor tour, or
-(4) exit. Places are numbered 1–15, where 1 is the port.
+A text menu to (1) show the shortest path between two places, (2) list all shortest paths, (3) build a Nearest Neighbor tour, or
+(4) exit. Places are numbered 1–15, where 1 is the port. It needs only Python 3, with no extra packages.
 
-## Current limitations
+## Limitations
 
-* The map is a simple diagram traced from the SP's Figure 3.1, not a real map. Real map integration is planned.
-* Distances and travel times are the SP's (Google Maps distances at a steady 40 km/h), with no traffic, opening hours or fees.
+* The map is a simple diagram traced from the SP's Figure 3.1, not a real map. A real map is planned.
+* Distances and travel times are the SP's own (Google Maps road distances at a steady 40 km/h). Traffic, opening hours and fees
+  aren't included.
+* Only 14 of Guimaras's 131 listed tourist destinations are covered.
 * This is a research demonstration, not a navigation app.
+
+## Source
+
+[github.com/kazeulo/GuimarasPathfinder](https://github.com/kazeulo/GuimarasPathfinder)
