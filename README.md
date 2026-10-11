@@ -10,7 +10,7 @@ Algorithm in Optimizing Tour Route for Selected Tourist Destinations in Guimaras
   fits the time you have.
 * **For the SP:** show how its method works, step by step, in plain language.
 
-> **Please note.** The calculations are verified: they give the same results as the SP. This website is not verified. It has not
+> **Please note.** The calculations are verified: they give the same results as the Special Problem's paper. This website is not verified. It has not
 > been formally checked or tested, so please use it as a guide only.
 
 ## Run it

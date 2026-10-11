@@ -41,6 +41,36 @@ describe.each(['wharf', 'roro'] as const)('pages render without crashing (%s)', 
   })
 })
 
+describe('Plan page help for visitors', () => {
+  const plan = (key: EntryKey) =>
+    render(PlanPage, {
+      props: { model: model(key), setEntryKey: noop, selected: selectionOf(PRESETS[0].nodes), setSelected: noop },
+    }).body
+
+  it('helps people who are not sure which starting point to pick', () => {
+    expect(plan('wharf')).toContain('Not sure which?')
+  })
+
+  it('shows vehicle hire prices next to the trip total when starting from Jordan Wharf', () => {
+    const body = plan('wharf')
+    expect(body).toContain('Hiring a vehicle for the day')
+    expect(body).toContain('₱1,800')
+    expect(body).toContain('₱4,000')
+    expect(body).toContain('₱4,500')
+  })
+
+  it('does not show hire prices for visitors bringing their own vehicle', () => {
+    expect(plan('roro')).not.toContain('Hiring a vehicle for the day')
+  })
+
+  it('does not show hire prices when there is no trip yet', () => {
+    const body = render(PlanPage, {
+      props: { model: model('wharf'), setEntryKey: noop, selected: selectionOf([]), setSelected: noop },
+    }).body
+    expect(body).not.toContain('Hiring a vehicle for the day')
+  })
+})
+
 describe('About page', () => {
   it('states plainly that the calculations are verified but the website is not', () => {
     const { body } = render(AboutPage, { props: {} })

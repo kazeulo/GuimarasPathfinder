@@ -3,7 +3,7 @@
   import Directions from '../components/Directions.svelte'
   import MapView from '../components/MapView.svelte'
   import type { Overlay, Segment } from '../components/overlay'
-  import { ENTRIES, PLACES, PRESETS, kindOf, placeName, selectionOf, type EntryKey } from '../data'
+  import { ENTRIES, PLACES, PRESETS, VEHICLES, kindOf, placeName, selectionOf, type EntryKey } from '../data'
   import { buildSchedule, clock, duration, planTour } from '../lib/trip'
   import type { Model } from '../model'
 
@@ -87,6 +87,10 @@
           </button>
         {/each}
       </div>
+      <p class="muted small">
+        Not sure which? Choose <strong>Jordan Wharf</strong> if you don&rsquo;t have a vehicle, or <strong>Jordan RoRo Port</strong> if
+        you&rsquo;re bringing one.
+      </p>
     </section>
 
     <section class="card">
@@ -180,6 +184,24 @@
           <div><dt>Whole trip</dt><dd>{duration(schedule.totalMin)}</dd></div>
         </dl>
 
+        {#if model.entryKey === 'wharf'}
+          <div class="hire">
+            <h3 class="mini">Hiring a vehicle for the day</h3>
+            <ul>
+              {#each VEHICLES as v (v.name)}
+                <li>
+                  <span class="vname">{v.name}</span>
+                  <span class="vwho">{v.who}</span>
+                  <span class="vprice">₱{v.perDay.toLocaleString('en-US')}</span>
+                </li>
+              {/each}
+            </ul>
+            <p class="muted small">
+              Prices are per day and cover as many places as fit in it. They are from 2023, so confirm locally.
+            </p>
+          </div>
+        {/if}
+
         <p class="muted small">
           The order is chosen by always driving to the closest place you haven&rsquo;t visited yet.
           <a href="#how">How was this worked out?</a>
@@ -193,21 +215,5 @@
         <Directions {model} />
       {/key}
     </details>
-
-    {#if model.entryKey === 'wharf'}
-      <details class="card fold">
-        <summary>Getting around without your own vehicle</summary>
-        <p class="muted">
-          The SP found that tourists usually hire a tricycle, jeepney or van for the day, and can visit as many places as fit
-          in that day:
-        </p>
-        <ul class="plain">
-          <li><strong>Tricycle</strong> — about ₱1,800 per day, for fewer than 5 people</li>
-          <li><strong>Jeepney</strong> — about ₱4,000 per day, for 15 to 20 people</li>
-          <li><strong>Van</strong> — about ₱4,500 per day, up to 15 people</li>
-        </ul>
-        <p class="muted small">Prices are from the 2023 SP and may have changed &mdash; confirm locally.</p>
-      </details>
-    {/if}
   </div>
 </div>

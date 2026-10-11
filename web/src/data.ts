@@ -88,7 +88,19 @@ export const POS: [number, number][] = [
 
 export const SPEED_KMH = 40
 
-export const REPO_URL = 'https://github.com/kazeulo/GuimarasPathfinder'
+// Vehicle hire per day, as collected from local drivers for the SP (Section 5.1).
+export interface Vehicle {
+  name: string
+  who: string
+  perDay: number // pesos
+}
+export const VEHICLES: Vehicle[] = [
+  { name: 'Tricycle', who: 'fewer than 5 people', perDay: 1800 },
+  { name: 'Jeepney', who: '15 to 20 people', perDay: 4000 },
+  { name: 'Van', who: 'up to 15 people', perDay: 4500 },
+]
+
+export const REPO_URL ='https://github.com/kazeulo/GuimarasPathfinder'
 
 // Friendlier wording for the SP categories (Table 3.1).
 const KIND: Record<string, string> = {
