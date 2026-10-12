@@ -43,17 +43,15 @@
     return set
   })
 
-  // advance one shortcut at a time while playing
+  // While playing, add one shortcut per tick until they are all shown.
+  // (A repeating timer started once: reading `pos` here would restart it on every step.)
   $effect(() => {
     if (!playing) return
-    if (done) {
-      playing = false
-      return
-    }
-    const id = setTimeout(() => {
-      pos = Math.min(pos + 1, events.length)
+    const id = setInterval(() => {
+      if (pos >= events.length) playing = false
+      else pos += 1
     }, 1000 / SPEEDS[speed].perSec)
-    return () => clearTimeout(id)
+    return () => clearInterval(id)
   })
 
   const overlay: Overlay = $derived.by(() => {

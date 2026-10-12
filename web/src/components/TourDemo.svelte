@@ -30,16 +30,14 @@
   const allPlaces = $derived(selected.slice(1).every(Boolean))
   const km = $derived(revealed.reduce((s, st) => s + st.d, 0))
 
+  // While playing, reveal one more stop per tick until the tour is complete.
   $effect(() => {
     if (!playing) return
-    if (finished) {
-      playing = false
-      return
-    }
-    const id = setTimeout(() => {
-      shown += 1
+    const id = setInterval(() => {
+      if (shown >= total) playing = false
+      else shown += 1
     }, STEP_MS)
-    return () => clearTimeout(id)
+    return () => clearInterval(id)
   })
 
   const restart = () => {
