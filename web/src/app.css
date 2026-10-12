@@ -5,15 +5,16 @@
   --text: #22302c;
   --muted: #5f6b66;
   --border: #e2dccd;
-  --accent: #0d6b7a; /* sea */
-  --accent-soft: #d9edf0;
+  --accent: #286ab0; /* blue */
+  --accent-soft: #dce8f5;
   --warm: #d9830f; /* mango */
   --warm-soft: #fcebcf;
   --edge: #cfc8b6;
-  --sea: #e4eff0;
+  --sea: #e2ecf5;
   --bad: #b3261e;
   --ok: #2d7a4a;
   --radius: 14px;
+  color-scheme: light;
   --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-size: 16px;
@@ -22,23 +23,22 @@
   background: var(--bg);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #12181a;
-    --surface: #1a2225;
-    --surface-2: #222c2f;
-    --text: #e8eeea;
-    --muted: #98a7a2;
-    --border: #2f3b3e;
-    --accent: #4cc0d2;
-    --accent-soft: #123940;
-    --warm: #f2a948;
-    --warm-soft: #3b2a12;
-    --edge: #3f4d4d;
-    --sea: #142226;
-    --bad: #ff8a80;
-    --ok: #6fcf8f;
-  }
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #12181a;
+  --surface: #1a2225;
+  --surface-2: #222c2f;
+  --text: #e8eeea;
+  --muted: #98a7a2;
+  --border: #2f3b3e;
+  --accent: #7aaee6; /* lighter tint of the same blue, readable on dark */
+  --accent-soft: #172b44;
+  --warm: #f2a948;
+  --warm-soft: #3b2a12;
+  --edge: #3f4d4d;
+  --sea: #14212e;
+  --bad: #ff8a80;
+  --ok: #6fcf8f;
 }
 
 * { box-sizing: border-box; }
@@ -62,8 +62,10 @@ h3.mini { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; 
   padding: 10px max(16px, calc((100vw - 1200px) / 2)); background: color-mix(in srgb, var(--bg) 88%, transparent);
   backdrop-filter: blur(8px); border-bottom: 1px solid var(--border);
 }
-.brand { font-family: var(--serif); font-size: 1.25rem; font-weight: 700; color: var(--text); text-decoration: none; }
-.brand span { color: var(--accent); }
+.brand { display: inline-flex; align-items: center; gap: 10px; font-family: var(--serif); font-size: 1.25rem; font-weight: 700; color: var(--text); text-decoration: none; }
+.brand img { display: block; width: 36px; height: 36px; }
+.brand-name span { color: var(--accent); }
+.head-right { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
 .site-head nav { display: flex; gap: 4px; }
 .site-head nav a { padding: 8px 12px; border-radius: 999px; text-decoration: none; color: var(--muted); font-weight: 600; font-size: 0.95rem; }
 .site-head nav a:hover { color: var(--text); background: var(--surface-2); }
@@ -87,7 +89,7 @@ main { flex: 1; width: 100%; max-width: 1200px; margin: 0 auto; padding: 20px 16
   display: inline-grid; place-items: center; flex: none; width: 1.8rem; height: 1.8rem; border-radius: 50%;
   background: var(--accent); color: #fff; font-family: system-ui, sans-serif; font-size: 0.95rem; font-weight: 700;
 }
-@media (prefers-color-scheme: dark) { .stepno { color: #06202a; } }
+:root[data-theme='dark'] .stepno { color: #0a1a2c; }
 
 .fold { padding: 0; }
 .fold > summary { padding: 14px 18px; cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; align-items: center; }
@@ -104,7 +106,7 @@ main { flex: 1; width: 100%; max-width: 1200px; margin: 0 auto; padding: 20px 16
 }
 .btn:hover:not(:disabled), .chip:hover:not(:disabled), .swap:hover { border-color: var(--accent); }
 .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; padding: 0 22px; }
-@media (prefers-color-scheme: dark) { .btn.primary { color: #06202a; } }
+:root[data-theme='dark'] .btn.primary { color: #0a1a2c; }
 .btn.ghost, .chip.ghost { background: transparent; color: var(--muted); }
 button:disabled { opacity: 0.45; cursor: default; }
 
@@ -277,3 +279,11 @@ button:disabled { opacity: 0.45; cursor: default; }
 .hire .vwho { color: var(--muted); }
 .hire .vprice { font-weight: 700; font-variant-numeric: tabular-nums; }
 .hire p { margin: 4px 0 0; }
+
+:root[data-theme='dark'] .matrix th.pivot { color: #0a1a2c; }
+:root[data-theme='dark'] .node.src .num,
+:root[data-theme='dark'] .node.dst .num,
+:root[data-theme='dark'] .node.src.port .num { fill: #0a1a2c; }
+
+.theme-toggle { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; flex: none; }
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }

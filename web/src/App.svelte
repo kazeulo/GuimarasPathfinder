@@ -2,6 +2,7 @@
   import { engine } from './algo'
   import { ENTRIES, PRESETS, REPO_URL, selectionOf, type EntryKey } from './data'
   import type { Model } from './model'
+  import ThemeToggle from './components/ThemeToggle.svelte'
   import AboutPage from './pages/AboutPage.svelte'
   import HowPage from './pages/HowPage.svelte'
   import PlanPage from './pages/PlanPage.svelte'
@@ -47,12 +48,18 @@
 
 <div class="app">
   <header class="site-head">
-    <a class="brand" href="#plan">Guimaras <span>Pathfinder</span></a>
-    <nav aria-label="Main">
-      {#each NAV as n (n.page)}
-        <a href="#{n.page}" aria-current={page === n.page ? 'page' : undefined}>{n.label}</a>
-      {/each}
-    </nav>
+    <a class="brand" href="#plan">
+      <img src="{import.meta.env.BASE_URL}images/logo-icon-96.png" alt="" width="36" height="36" />
+      <span class="brand-name">Guimaras <span>Pathfinder</span></span>
+    </a>
+    <div class="head-right">
+      <nav aria-label="Main">
+        {#each NAV as n (n.page)}
+          <a href="#{n.page}" aria-current={page === n.page ? 'page' : undefined}>{n.label}</a>
+        {/each}
+      </nav>
+      <ThemeToggle />
+    </div>
   </header>
 
   <main>
