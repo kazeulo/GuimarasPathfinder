@@ -1,6 +1,6 @@
 <script lang="ts">
   import FloydDemo from '../components/FloydDemo.svelte'
-  import MapView from '../components/MapView.svelte'
+  import MapPanel from '../components/MapPanel.svelte'
   import TourDemo from '../components/TourDemo.svelte'
   import type { Model } from '../model'
 
@@ -42,7 +42,7 @@ tour.append(port)           # return to the start`
       connect some of them directly, but most pairs have no direct road, so getting from one to another means passing through others.
       Faced with 15 places, it is hard to tell by eye which route is shortest.
     </p>
-    <MapView graph={model.entry.graph} entry={model.entry} />
+    <MapPanel graph={model.entry.graph} entry={model.entry} />
   </section>
 
   <section>

@@ -81,7 +81,7 @@
     <h2>Please keep in mind</h2>
     <ul class="plain">
       <li>This is a research demonstration, not a navigation app. Check local conditions before you travel.</li>
-      <li>Routes are shown on a simple diagram of the island, not on a true map, and times are estimates.</li>
+      <li>Routes are drawn on roads from OpenStreetMap, which can differ a little from the Google Maps routes behind the distances. Times are estimates.</li>
       <li>Opening hours, entrance fees and road conditions are not included.</li>
     </ul>
   </section>

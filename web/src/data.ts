@@ -29,6 +29,7 @@ export type EntryKey = 'wharf' | 'roro'
 
 export interface Entry {
   label: string
+  latlng: [number, number] // where the port is on the map
   sub: string
   graph: Graph
   paperKm: number
@@ -39,6 +40,7 @@ export interface Entry {
 export const ENTRIES: Record<EntryKey, Entry> = {
   wharf: {
     label: 'Jordan Wharf',
+    latlng: [10.667391, 122.588523], // OpenStreetMap ferry terminal
     sub: 'commuters',
     graph: GRAPH_WHARF,
     paperKm: 118.85,
@@ -46,6 +48,7 @@ export const ENTRIES: Record<EntryKey, Entry> = {
   },
   roro: {
     label: 'Jordan RoRo Port',
+    latlng: [10.665828, 122.584754], // OpenStreetMap ferry terminal
     sub: 'own vehicle',
     graph: GRAPH_RORO,
     paperKm: 118.95,
@@ -77,6 +80,26 @@ export const PLACES: Place[] = [
   { n: 13, name: 'OLP Trappist Monastery', cat: 'Cultural', stay: 45 },
   { n: 14, name: 'Sunrise Valley Ocean View Resort', cat: 'Leisure & Entertainment', stay: 120 },
   { n: 15, name: 'Pitstop Restaurant', cat: 'Cultural', stay: 45 },
+]
+
+// Real positions [latitude, longitude] of the destinations, index-aligned with PLACES.
+// Index 0 is the starting port, whose position depends on the chosen entry (see Entry.latlng).
+export const COORDS: [number, number][] = [
+  [10.667391, 122.588523], // 1  Jordan Wharf (placeholder, use Entry.latlng)
+  [10.53475145850103, 122.51702143211782], // 2  Alobijod Beach Cove
+  [10.484477616663833, 122.47613460142452], // 3  Tahi Beach
+  [10.578206776680215, 122.68842836791544], // 4  Reyley Fish and Farm Haven
+  [10.658786405857995, 122.5920595395367], // 5  Smallest Plaza
+  [10.600161744354452, 122.58875949404211], // 6  Guimaras Landmark
+  [10.436297455221801, 122.54348020141725], // 7  Bikers' Hill
+  [10.654518996325281, 122.62594147076464], // 8  Guimaras Mountain Resort
+  [10.51142595741658, 122.49940610142858], // 9  SEAFDEC
+  [10.601080481570506, 122.70203814186314], // 10 Wind Farm
+  [10.643529341917883, 122.72306243213443], // 11 Playa de Paraiso
+  [10.54537977316567, 122.5628260241765], // 12 Camp Alfredo
+  [10.57982899692564, 122.57679144006778], // 13 OLP Trappist Monastery
+  [10.566928185572804, 122.666565908294], // 14 Sunrise Valley Ocean View Resort
+  [10.59774665004695, 122.58801270144167], // 15 Pitstop Restaurant
 ]
 
 // Approximate map positions traced from the paper's Figure 3.1 (SVG units).

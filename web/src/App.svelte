@@ -63,7 +63,7 @@
     {#if page === 'plan'}
       <div class="hero">
         <h1>Plan a day in Guimaras</h1>
-        <p>Pick where you start and the places you want to see. We&rsquo;ll find a short route and tell you how long it takes.</p>
+        <p>Pick the places you want to see. We&rsquo;ll find a short route and tell you how long it takes.</p>
       </div>
       <PlanPage {model} {selected} {setSelected} />
     {:else if page === 'how'}

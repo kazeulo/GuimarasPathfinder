@@ -82,11 +82,17 @@ A text menu to (1) show the shortest path between two places, (2) list all short
 
 ## Limitations
 
-* The map is a simple diagram traced from the SP's Figure 3.1, not a real map. A real map is planned.
+* Roads on the map come from OpenStreetMap and can differ a little from the Google Maps routes behind the SP's distances. The distances
+  and times shown are always the SP's own.
 * Distances and travel times are the SP's own (Google Maps road distances at a steady 40 km/h). Traffic, opening hours and fees
   aren't included.
 * Only 14 of Guimaras's 131 listed tourist destinations are covered.
 * This is a research demonstration, not a navigation app.
+
+## Credits
+
+Map data © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors. Road shapes were fetched once from the public
+[OSRM](https://project-osrm.org) demo server (`web/scripts/fetch-roads.mjs`), so the site itself makes no routing requests.
 
 ## Source
 

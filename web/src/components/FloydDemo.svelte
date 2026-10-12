@@ -2,7 +2,7 @@
   import { fmtNum } from '../algo/helpers'
   import { placeName } from '../data'
   import type { Model } from '../model'
-  import MapView from './MapView.svelte'
+  import MapPanel from './MapPanel.svelte'
   import Matrix from './Matrix.svelte'
   import type { Overlay } from './overlay'
 
@@ -103,7 +103,7 @@
 </script>
 
 <div class="split demo">
-  <MapView graph={entry.graph} {entry} {overlay} />
+  <MapPanel graph={entry.graph} {entry} {overlay} />
   <div class="stack">
     <div class="card">
       <p class="demo-head" aria-live="polite">{text.headline}</p>

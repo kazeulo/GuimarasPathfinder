@@ -3,7 +3,7 @@
   import { PRESETS, SPEED_KMH, placeName, selectionOf } from '../data'
   import { planTour } from '../lib/trip'
   import type { Model } from '../model'
-  import MapView from './MapView.svelte'
+  import MapPanel from './MapPanel.svelte'
   import type { Overlay, Segment } from './overlay'
 
   interface Props {
@@ -84,7 +84,7 @@
 </script>
 
 <div class="split demo">
-  <MapView graph={entry.graph} {entry} {overlay} />
+  <MapPanel graph={entry.graph} {entry} {overlay} />
   <div class="stack">
     <div class="card">
       {#if total === 0}

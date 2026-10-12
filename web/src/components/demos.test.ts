@@ -3,6 +3,7 @@ import { flushSync, mount, unmount } from 'svelte'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { engine } from '../algo'
 import { ENTRIES, PRESETS, selectionOf } from '../data'
+import { setMapMode } from '../lib/mapMode.svelte'
 import type { Model } from '../model'
 import FloydDemo from './FloydDemo.svelte'
 import TourDemo from './TourDemo.svelte'
@@ -13,6 +14,7 @@ let target: HTMLElement
 let app: ReturnType<typeof mount> | undefined
 
 beforeEach(() => {
+  setMapMode('diagram') // the real map needs a real browser; these tests are about the animation
   vi.useFakeTimers()
   target = document.createElement('div')
   document.body.append(target)

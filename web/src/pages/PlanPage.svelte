@@ -1,7 +1,7 @@
 <script lang="ts">
   import { fmtNum, reconstructPath } from '../algo/helpers'
   import Directions from '../components/Directions.svelte'
-  import MapView from '../components/MapView.svelte'
+  import MapPanel from '../components/MapPanel.svelte'
   import type { Overlay, Segment } from '../components/overlay'
   import { PLACES, PRESETS, VEHICLES, kindOf, placeName, selectionOf } from '../data'
   import { buildSchedule, clock, duration, planTour } from '../lib/trip'
@@ -69,7 +69,7 @@
 </script>
 
 <div class="split">
-  <MapView graph={entry.graph} {entry} {overlay} onNodeClick={toggle} />
+  <MapPanel graph={entry.graph} {entry} {overlay} onNodeClick={toggle} />
 
   <div class="stack">
     <section class="card">
