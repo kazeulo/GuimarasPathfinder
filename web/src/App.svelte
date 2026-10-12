@@ -1,6 +1,6 @@
 <script lang="ts">
   import { engine } from './algo'
-  import { ENTRIES, PRESETS, REPO_URL, selectionOf, type EntryKey } from './data'
+  import { ENTRIES, PRESETS, REPO_URL, selectionOf } from './data'
   import type { Model } from './model'
   import ThemeToggle from './components/ThemeToggle.svelte'
   import AboutPage from './pages/AboutPage.svelte'
@@ -21,20 +21,17 @@
   }
 
   let page = $state<Page>(pageFromHash())
-  let entryKey = $state<EntryKey>('wharf')
   // a sensible trip is ready from the start, so nobody faces an empty screen
   let selected = $state<boolean[]>(selectionOf(PRESETS[0].nodes))
 
-  // switching the starting point re-runs Floyd–Warshall for that port's road network
-  const model: Model = $derived({
-    entryKey,
-    entry: ENTRIES[entryKey],
-    fw: engine.floydWarshall(ENTRIES[entryKey].graph),
-  })
-
-  const setEntryKey = (k: EntryKey) => {
-    entryKey = k
+  // Every trip starts at Jordan Wharf. The RoRo Port (for visitors bringing a vehicle) is only 0.1 km
+  // different per leg, so it isn't offered; its data stays in data.ts for the checks against the SP.
+  const model: Model = {
+    entryKey: 'wharf',
+    entry: ENTRIES.wharf,
+    fw: engine.floydWarshall(ENTRIES.wharf.graph),
   }
+
   const setSelected = (s: boolean[]) => {
     selected = s
   }
@@ -68,7 +65,7 @@
         <h1>Plan a day in Guimaras</h1>
         <p>Pick where you start and the places you want to see. We&rsquo;ll find a short route and tell you how long it takes.</p>
       </div>
-      <PlanPage {model} {setEntryKey} {selected} {setSelected} />
+      <PlanPage {model} {selected} {setSelected} />
     {:else if page === 'how'}
       <HowPage {model} {selected} {setSelected} />
     {:else}

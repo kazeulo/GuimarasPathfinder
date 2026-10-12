@@ -52,9 +52,7 @@ tour.append(port)           # return to the start`
       keep asking <em>&ldquo;would going through a third place be quicker?&rdquo;</em> The computer does this for every pair, using
       every place in turn as the stop-over. When it finishes, it knows the shortest road distance between all pairs.
     </p>
-    {#key model.entryKey}
-      <FloydDemo {model} />
-    {/key}
+    <FloydDemo {model} />
   </section>
 
   <section>
@@ -68,9 +66,7 @@ tour.append(port)           # return to the start`
       This uses the places you chose on the <a href="#plan">Plan a trip</a> page. Pick &ldquo;All 14 places&rdquo; below to see the
       route from the SP.
     </p>
-    {#key model.entryKey}
-      <TourDemo {model} {selected} {setSelected} />
-    {/key}
+    <TourDemo {model} {selected} {setSelected} />
   </section>
 
   <section>

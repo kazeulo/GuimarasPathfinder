@@ -3,24 +3,18 @@
   import Directions from '../components/Directions.svelte'
   import MapView from '../components/MapView.svelte'
   import type { Overlay, Segment } from '../components/overlay'
-  import { ENTRIES, PLACES, PRESETS, VEHICLES, kindOf, placeName, selectionOf, type EntryKey } from '../data'
+  import { PLACES, PRESETS, VEHICLES, kindOf, placeName, selectionOf } from '../data'
   import { buildSchedule, clock, duration, planTour } from '../lib/trip'
   import type { Model } from '../model'
 
   interface Props {
     model: Model
-    setEntryKey: (k: EntryKey) => void
     selected: boolean[]
     setSelected: (s: boolean[]) => void
   }
 
-  let { model, setEntryKey, selected, setSelected }: Props = $props()
+  let { model, selected, setSelected }: Props = $props()
 
-  const ENTRY_KEYS = Object.keys(ENTRIES) as EntryKey[]
-  const ENTRY_COPY: Record<EntryKey, string> = {
-    wharf: 'Arriving by ferry on foot, without a vehicle.',
-    roro: 'Bringing your own car or motorbike on the RoRo ferry.',
-  }
   const HOURS = [
     { h: 6, label: 'Half day' },
     { h: 10, label: 'Full day' },
@@ -39,6 +33,13 @@
   const budget = $derived(hours * 60)
   const ready = $derived(count > 0 && tour.complete)
   const fits = $derived(schedule.totalMin <= budget)
+
+  // destinations from nearest to farthest by road distance from the port
+  const byDistance = $derived(
+    PLACES.map((p, i) => ({ p, i }))
+      .slice(1)
+      .sort((a, b) => fw.dist[0][a.i] - fw.dist[0][b.i]),
+  )
 
   const toggle = (i: number) => {
     if (i === 0) return
@@ -72,29 +73,7 @@
 
   <div class="stack">
     <section class="card">
-      <h2><span class="stepno">1</span> Where does your trip start?</h2>
-      <div class="choice-grid" role="radiogroup" aria-label="Starting point">
-        {#each ENTRY_KEYS as key (key)}
-          <button
-            type="button"
-            role="radio"
-            aria-checked={model.entryKey === key}
-            class={['choice', { on: model.entryKey === key }]}
-            onclick={() => setEntryKey(key)}
-          >
-            <strong>{ENTRIES[key].label}</strong>
-            <span>{ENTRY_COPY[key]}</span>
-          </button>
-        {/each}
-      </div>
-      <p class="muted small">
-        Not sure which? Choose <strong>Jordan Wharf</strong> if you don&rsquo;t have a vehicle, or <strong>Jordan RoRo Port</strong> if
-        you&rsquo;re bringing one.
-      </p>
-    </section>
-
-    <section class="card">
-      <h2><span class="stepno">2</span> What would you like to see?</h2>
+      <h2><span class="stepno">1</span> What would you like to see?</h2>
       <p class="muted">Tap places on the map or in the list. Not sure? Start with an idea:</p>
       <div class="chips">
         {#each PRESETS as p (p.id)}
@@ -103,14 +82,14 @@
         <button type="button" class="chip ghost" onclick={() => setSelected(selectionOf([]))} disabled={count === 0}>Clear</button>
       </div>
 
+      <p class="muted small">Listed from nearest to farthest from {entry.label}.</p>
       <ul class="places">
-        {#each PLACES.slice(1) as p, k (p.n)}
-          {@const i = k + 1}
+        {#each byDistance as { p, i } (i)}
           <li>
             <label class={{ on: selected[i] }}>
               <input type="checkbox" checked={selected[i]} onchange={() => toggle(i)} />
               <span class="pname">{p.name}</span>
-              <span class="pmeta">{kindOf(p)} · about {duration(p.stay)}</span>
+              <span class="pmeta">{fmtNum(fw.dist[0][i])} km away · {kindOf(p)} · about {duration(p.stay)}</span>
             </label>
           </li>
         {/each}
@@ -118,7 +97,7 @@
     </section>
 
     <section class="card">
-      <h2><span class="stepno">3</span> Your trip</h2>
+      <h2><span class="stepno">2</span> Your trip</h2>
 
       {#if !ready}
         <p class="muted">
@@ -184,23 +163,22 @@
           <div><dt>Whole trip</dt><dd>{duration(schedule.totalMin)}</dd></div>
         </dl>
 
-        {#if model.entryKey === 'wharf'}
-          <div class="hire">
-            <h3 class="mini">Hiring a vehicle for the day</h3>
-            <ul>
-              {#each VEHICLES as v (v.name)}
-                <li>
-                  <span class="vname">{v.name}</span>
-                  <span class="vwho">{v.who}</span>
-                  <span class="vprice">₱{v.perDay.toLocaleString('en-US')}</span>
-                </li>
-              {/each}
-            </ul>
-            <p class="muted small">
-              Prices are per day and cover as many places as fit in it. They are from 2023, so confirm locally.
-            </p>
-          </div>
-        {/if}
+        <div class="hire">
+          <h3 class="mini">Hiring a vehicle for the day</h3>
+          <p class="muted small">If you don&rsquo;t have your own vehicle:</p>
+          <ul>
+            {#each VEHICLES as v (v.name)}
+              <li>
+                <span class="vname">{v.name}</span>
+                <span class="vwho">{v.who}</span>
+                <span class="vprice">₱{v.perDay.toLocaleString('en-US')}</span>
+              </li>
+            {/each}
+          </ul>
+          <p class="muted small">
+            Prices are per day and cover as many places as fit in it. They are from 2023, so confirm locally.
+          </p>
+        </div>
 
         <p class="muted small">
           The order is chosen by always driving to the closest place you haven&rsquo;t visited yet.
@@ -211,9 +189,7 @@
 
     <details class="card fold">
       <summary>Directions between two places</summary>
-      {#key model.entryKey}
-        <Directions {model} />
-      {/key}
+      <Directions {model} />
     </details>
   </div>
 </div>

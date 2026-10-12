@@ -14,7 +14,7 @@ npm run build   # production build in dist/
 ```
 
 ## Three pages
-1. **Plan a trip** (home, for visitors) - choose where the trip starts and which places to see; get a timetable with clock times,
+1. **Plan a trip** (home, for visitors) - choose which places to see (trips start at Jordan Wharf); get a timetable with clock times,
    driving and staying time, and whether it fits the time available.
 2. **How it works** - plain-language walkthrough of Floyd-Warshall (find shortcuts) and Nearest Neighbor (closest place first),
    each as an animated demo, plus a collapsed section for technical readers.

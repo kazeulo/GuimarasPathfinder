@@ -60,6 +60,15 @@
   </section>
 
   <section>
+    <h2>Where trips start</h2>
+    <p>
+      The SP looked at two entry points in Jordan: the Wharf, for visitors arriving without a vehicle, and the RoRo Port, for visitors
+      bringing their own. They are only a few hundred metres apart and give almost the same routes, with a full tour about 0.2 km
+      longer from the RoRo Port. So every trip on this site starts and ends at Jordan Wharf.
+    </p>
+  </section>
+
+  <section>
     <h2>Does this app reproduce the SP?</h2>
     <p>
       <strong>The distances do, exactly.</strong> Automated tests compare all 225 shortest distances for Jordan Wharf (Table 4.1) and

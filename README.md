@@ -40,7 +40,7 @@ If `npm install` fails with *"Cannot find native binding"*, see the troubleshoot
 
 | Page | What it does |
 |---|---|
-| **Plan a trip** | Choose where you start (Jordan Wharf or Jordan RoRo Port) and the places to visit. You get a timetable with driving and staying time at each stop, and whether it fits your day. |
+| **Plan a trip** | Choose the places to visit. You get a timetable with driving and staying time at each stop, whether it fits your day, and what hiring a vehicle costs. Every trip starts at Jordan Wharf. |
 | **How it works** | A plain-language, animated walkthrough of the two methods behind the route, with a collapsed section for technical readers. |
 | **About** | The SP, where the data comes from, and what has and hasn't been verified. |
 
