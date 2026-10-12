@@ -13,10 +13,10 @@
   </header>
 
   <aside class="notice" aria-label="What has and has not been verified">
-    <h2>Please note</h2>
+    <h2>Note</h2>
     <ul class="plain">
       <li>
-        <strong>The calculations are verified.</strong> They give the same results as the SP.
+        <strong>The calculations are verified.</strong> They give the same results as the Special Problem's paper.
       </li>
       <li>
         <strong>This website is not verified.</strong> It has not been formally checked or tested, so please use it as a guide only.
@@ -25,14 +25,14 @@
   </aside>
 
   <section>
-    <h2>The SP</h2>
+    <h2>The Special Problem</h2>
     <p>
       <em>Application of Floyd–Warshall Algorithm in Optimizing Tour Route for Selected Tourist Destinations in Guimaras Province</em>,
       a special problem for the Bachelor of Science in Applied Mathematics at the University of the Philippines Visayas, June 2023,
       by Rhona Pauline A. Bernardo, Angellyn B. Lozada and Kzcl Jay R. Manejo.
     </p>
     <p>
-      Its aim: help tourists spend more of their time enjoying places and less of it travelling between them, by finding the
+      Its goal: help tourists spend more of their time enjoying places and less of it travelling between them, by finding the
       shortest road between every pair of 14 popular destinations and suggesting a route that visits them all.
     </p>
   </section>
