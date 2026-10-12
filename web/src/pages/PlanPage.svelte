@@ -41,6 +41,18 @@
       .sort((a, b) => fw.dist[0][a.i] - fw.dist[0][b.i]),
   )
 
+  // On a phone the trip is far below the places. While it is off-screen, a small bar keeps the result in view.
+  let tripEl = $state<HTMLElement>()
+  let tripInView = $state(false)
+  $effect(() => {
+    if (!tripEl || typeof IntersectionObserver === 'undefined') return
+    const watcher = new IntersectionObserver(([entry]) => (tripInView = entry.isIntersecting), { threshold: 0.15 })
+    watcher.observe(tripEl)
+    return () => watcher.disconnect()
+  })
+  const showTrip = () =>
+    tripEl?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' })
+
   const toggle = (i: number) => {
     if (i === 0) return
     setSelected(selected.map((s, k) => (k === i ? !s : s)))
@@ -89,14 +101,14 @@
             <label class={{ on: selected[i] }}>
               <input type="checkbox" checked={selected[i]} onchange={() => toggle(i)} />
               <span class="pname">{p.name}</span>
-              <span class="pmeta">{fmtNum(fw.dist[0][i])} km away · {kindOf(p)} · about {duration(p.stay)}</span>
+              <span class="pmeta">{fmtNum(fw.dist[0][i])} km away · {kindOf(p)} · <span class="nowrap">about {duration(p.stay)}</span></span>
             </label>
           </li>
         {/each}
       </ul>
     </section>
 
-    <section class="card">
+    <section class="card" bind:this={tripEl}>
       <h2><span class="stepno">2</span> Your trip</h2>
 
       {#if !ready}
@@ -150,7 +162,7 @@
                   Back at {entry.label}
                 {:else}
                   <b>{placeName(leg.to, entry)}</b>
-                  <small>stay about {duration(leg.stayMin)}, leave {clock(leg.leave)}</small>
+                  <small>stay about {duration(leg.stayMin)}, <span class="nowrap">leave {clock(leg.leave)}</span></small>
                 {/if}
               </span>
             </li>
@@ -193,3 +205,13 @@
     </details>
   </div>
 </div>
+
+{#if ready && !tripInView}
+  <div class="trip-bar" role="region" aria-label="Trip summary">
+    <p>
+      <strong>{count} {count === 1 ? 'place' : 'places'}</strong> · {duration(schedule.totalMin)}
+      <span class={['flag', fits ? 'ok' : 'over']}>{fits ? 'fits your day' : 'too long'}</span>
+    </p>
+    <button type="button" class="btn primary" onclick={showTrip}>See trip</button>
+  </div>
+{/if}

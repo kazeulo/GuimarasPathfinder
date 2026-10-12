@@ -121,7 +121,7 @@
     <p class="map-error">The map couldn&rsquo;t load. Use the &ldquo;Diagram&rdquo; view instead.</p>
   {/if}
   <div class="rl-map" bind:this={el} role="region" aria-label="Map of Guimaras showing the places and the roads between them"></div>
-  <figcaption>
+  <figcaption class="map-note">
     <span class="hint">Roads are drawn from OpenStreetMap and may differ a little from the Google Maps routes behind the distances.</span>
   </figcaption>
 </figure>

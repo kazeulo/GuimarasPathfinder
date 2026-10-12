@@ -73,6 +73,19 @@ describe('Plan page for visitors', () => {
     expect(body).toContain('₱4,500')
   })
 
+  it('offers a summary bar so a phone user can jump to the trip', () => {
+    const body = plan(selectionOf(PRESETS[0].nodes))
+    expect(body).toContain('class="trip-bar"')
+    expect(body).toContain('5 places')
+    expect(body).toContain('fits your day')
+    expect(body).toContain('See trip')
+    expect(plan(selectionOf([4]))).toContain('1 place')
+  })
+
+  it('has no summary bar when there is no trip yet', () => {
+    expect(plan(selectionOf([]))).not.toContain('trip-bar')
+  })
+
   it('does not show hire prices when there is no trip yet', () => {
     expect(plan(selectionOf([]))).not.toContain('Hiring a vehicle for the day')
   })
