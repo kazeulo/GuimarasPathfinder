@@ -180,7 +180,7 @@ button:disabled { opacity: 0.45; cursor: default; }
 .page > section { margin-top: 38px; }
 .page > section > p { max-width: 44rem; }
 .page .split { margin-top: 14px; }
-.page .map-wrap { position: static; }
+.page .map-wrap { position: relative; top: auto; }
 
 .demo-head { font-family: var(--serif); font-size: 1.15rem; font-weight: 700; margin: 0 0 6px; }
 .demo-detail { margin: 0 0 10px; }
@@ -207,8 +207,9 @@ button:disabled { opacity: 0.45; cursor: default; }
 /* ---------- map ---------- */
 .map { margin: 0; background: var(--sea); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
 .map-wrap { position: sticky; top: 76px; }
-@media (max-width: 900px) { .map-wrap { position: static; } }
-.map-switch { margin-bottom: 8px; }
+@media (max-width: 900px) { .map-wrap { position: relative; top: auto; } }
+/* the Map / Diagram switch floats in the map's top-right corner (zoom buttons are top-left) */
+.map-switch { position: absolute; top: 10px; right: 10px; z-index: 5; background: var(--surface); box-shadow: 0 1px 5px rgb(0 0 0 / 0.3); }
 .map > svg { display: block; width: 100%; height: auto; max-height: 76vh; }
 .map figcaption { display: flex; flex-direction: column; gap: 2px; padding: 8px 14px; background: var(--surface); border-top: 1px solid var(--border); font-size: 0.82rem; color: var(--muted); }
 .map figcaption label { color: var(--text); }
