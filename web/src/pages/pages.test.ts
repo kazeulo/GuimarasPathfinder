@@ -43,6 +43,13 @@ describe.each(['wharf', 'roro'] as const)('pages render without crashing (%s)', 
 describe('Plan page for visitors', () => {
   const plan = (selected: boolean[]) =>
     render(PlanPage, { props: { model: model('wharf'), selected, setSelected: noop } }).body
+  const photoBody = () => plan(selectionOf(PRESETS[0].nodes))
+  it('keeps the list and timeline free of photos (they appear when a pin is clicked)', () => {
+    const body = photoBody()
+    expect(body).not.toContain('pthumb')
+    expect(body).not.toContain('tl-thumb')
+    expect(body).not.toContain('images/places/')
+  })
 
   it('goes straight to choosing places, with no starting-point question', () => {
     const body = plan(selectionOf(PRESETS[0].nodes))
@@ -73,17 +80,12 @@ describe('Plan page for visitors', () => {
     expect(body).toContain('₱4,500')
   })
 
-  it('offers a summary bar so a phone user can jump to the trip', () => {
+  it('summarises the trip at the top of the panel (what a phone shows while the sheet is closed)', () => {
     const body = plan(selectionOf(PRESETS[0].nodes))
-    expect(body).toContain('class="trip-bar"')
     expect(body).toContain('5 places')
     expect(body).toContain('fits your day')
-    expect(body).toContain('See trip')
     expect(plan(selectionOf([4]))).toContain('1 place')
-  })
-
-  it('has no summary bar when there is no trip yet', () => {
-    expect(plan(selectionOf([]))).not.toContain('trip-bar')
+    expect(plan(selectionOf([]))).toContain('Choose places to plan your day')
   })
 
   it('does not show hire prices when there is no trip yet', () => {

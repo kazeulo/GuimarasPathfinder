@@ -43,7 +43,7 @@
 
 <svelte:window onhashchange={onHashChange} />
 
-<div class="app">
+<div class={["app", { "plan-page": page === "plan" }]}>
   <header class="site-head">
     <a class="brand" href="#plan">
       <img src="{import.meta.env.BASE_URL}images/logo-icon-96.png" alt="" width="36" height="36" />
@@ -59,12 +59,8 @@
     </div>
   </header>
 
-  <main>
+  <main class={{ full: page === 'plan' }}>
     {#if page === 'plan'}
-      <div class="hero">
-        <h1>Plan a day in Guimaras</h1>
-        <p>Pick the places you want to see. We&rsquo;ll find a short route and tell you how long it takes.</p>
-      </div>
       <PlanPage {model} {selected} {setSelected} />
     {:else if page === 'how'}
       <HowPage {model} {selected} {setSelected} />
@@ -73,9 +69,12 @@
     {/if}
   </main>
 
-  <footer class="site-foot">
-    <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
-      View the source on GitHub<span class="sr-only"> (opens in a new tab)</span>
-    </a>
-  </footer>
+  <!-- the Plan page is a full-screen map; its GitHub link lives at the bottom of the panel instead -->
+  {#if page !== 'plan'}
+    <footer class="site-foot">
+      <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
+        View the source on GitHub<span class="sr-only"> (opens in a new tab)</span>
+      </a>
+    </footer>
+  {/if}
 </div>

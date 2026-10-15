@@ -11,20 +11,21 @@
     entry: Entry
     overlay?: Overlay
     onNodeClick?: (i: number) => void
+    fill?: boolean // fill the parent instead of sitting inline (Plan page)
   }
 
   // The map every page shows: the real map by default, with the simple diagram as an alternative.
-  let { graph, entry, overlay = {}, onNodeClick }: Props = $props()
+  let { graph, entry, overlay = {}, onNodeClick, fill = false }: Props = $props()
 </script>
 
-<div class="map-wrap">
+<div class={["map-wrap", { fill }]}>
   <div class="seg-control map-switch" role="group" aria-label="Map style">
     <button type="button" class={{ on: mapMode.value === 'map' }} onclick={() => setMapMode('map')}>Map</button>
     <button type="button" class={{ on: mapMode.value === 'diagram' }} onclick={() => setMapMode('diagram')}>Diagram</button>
   </div>
   {#if mapMode.value === 'map'}
-    <RealMap {graph} {entry} {overlay} {onNodeClick} />
+    <RealMap {graph} {entry} {overlay} {onNodeClick} {fill} />
   {:else}
-    <MapView {graph} {entry} {overlay} {onNodeClick} />
+    <MapView {graph} {entry} {overlay} {onNodeClick} {fill} />
   {/if}
 </div>

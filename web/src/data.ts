@@ -64,6 +64,16 @@ export interface Place {
   stay: number // minutes (Tables 3.4 / 3.5)
 }
 
+// Photo file for a place (index into PLACES), or null for the port, which has none.
+export const photoOf = (i: number): string | null =>
+  i === 0
+    ? null
+    : `${import.meta.env.BASE_URL}images/places/${(PLACES[i].name as string)
+        .toLowerCase()
+        .replace(/'/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')}.webp`
+
 export const PLACES: Place[] = [
   { n: 1, name: null, cat: 'Entry point', stay: 0 },
   { n: 2, name: 'Alobijod Beach Cove', cat: 'Sun and Beach', stay: 120 },

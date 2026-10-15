@@ -9,9 +9,10 @@
     entry: Entry
     overlay?: Overlay
     onNodeClick?: (i: number) => void
+    fill?: boolean
   }
 
-  let { graph, entry, overlay = {}, onNodeClick }: Props = $props()
+  let { graph, entry, overlay = {}, onNodeClick, fill = false }: Props = $props()
 
   const R = 8.5
   let weights = $state(false)
@@ -36,7 +37,7 @@
   }
 </script>
 
-<figure class="map">
+<figure class={["map", { fill }]}>
   <svg viewBox="320 118 370 365" role="img" aria-label="Schematic map of the 15 points of interest in Guimaras and the roads between them">
     <g class="edges">
       {#each edges as [a, b] (`${a}-${b}`)}

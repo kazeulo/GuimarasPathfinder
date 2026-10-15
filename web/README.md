@@ -31,6 +31,7 @@ src/
   lib/trip.ts        turns a tour into a timetable (clock times, totals)
   lib/roads.ts       road shapes between places, for drawing on the map
   lib/mapMode.svelte.ts  remembers map vs diagram
+  lib/sheet.ts       snap heights and flick logic for the phone bottom sheet
   data/roads.json    road shapes from OpenStreetMap (made by scripts/fetch-roads.mjs)
   components/        MapPanel (map/diagram switch), RealMap (Leaflet + OpenStreetMap), MapView (SVG diagram),
                      Matrix, FloydDemo, TourDemo, Directions, ThemeToggle (.svelte)

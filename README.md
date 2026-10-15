@@ -40,7 +40,7 @@ If `npm install` fails with *"Cannot find native binding"*, see the troubleshoot
 
 | Page | What it does |
 |---|---|
-| **Plan a trip** | Choose the places to visit. You get a timetable with driving and staying time at each stop, whether it fits your day, and what hiring a vehicle costs. Every trip starts at Jordan Wharf. |
+| **Plan a trip** | A full-screen map with a floating panel (a bottom sheet on phones). Search and choose the places to visit, or click pins on the map. You get a timetable with driving and staying time at each stop, whether it fits your day, and what hiring a vehicle costs. Every trip starts at Jordan Wharf. |
 | **How it works** | A plain-language, animated walkthrough of the two methods behind the route, with a collapsed section for technical readers. |
 | **About** | The SP, where the data comes from, and what has and hasn't been verified. |
 
