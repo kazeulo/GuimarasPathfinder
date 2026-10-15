@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { applyTheme, currentTheme, nextTheme, saveTheme, watchSystemTheme, type Theme } from '../lib/theme'
+  import { applyTheme, currentTheme, nextTheme, saveTheme, type Theme } from '../lib/theme'
 
   // `document` doesn't exist when rendering on the server (tests), so start from light there.
   let theme = $state<Theme>(typeof document === 'undefined' ? 'light' : currentTheme())
@@ -9,14 +9,6 @@
     applyTheme(theme)
     saveTheme(theme)
   }
-
-  // until the visitor makes a choice, follow the device if it switches
-  $effect(() =>
-    watchSystemTheme((t) => {
-      theme = t
-      applyTheme(t)
-    }),
-  )
 </script>
 
 <button

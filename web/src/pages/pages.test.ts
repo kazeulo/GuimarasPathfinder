@@ -51,6 +51,13 @@ describe('Plan page for visitors', () => {
     expect(body).not.toContain('images/places/')
   })
 
+  it('opens with the headline and one-line explanation', () => {
+    const body = plan(selectionOf(PRESETS[0].nodes))
+    expect(body).toContain('Plan a day in Guimaras')
+    expect(body).toContain('Pick the places you want to see.')
+    expect(body).toContain('tell you how long it takes.')
+  })
+
   it('goes straight to choosing places, with no starting-point question', () => {
     const body = plan(selectionOf(PRESETS[0].nodes))
     expect(body).toContain('What would you like to see?')

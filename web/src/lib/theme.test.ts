@@ -4,19 +4,18 @@ import ThemeToggle from '../components/ThemeToggle.svelte'
 import { nextTheme, resolveTheme } from './theme'
 
 describe('choosing the theme', () => {
-  it('follows the device when nothing has been saved', () => {
-    expect(resolveTheme(null, true)).toBe('dark')
-    expect(resolveTheme(null, false)).toBe('light')
+  it('opens in light mode when nothing has been saved', () => {
+    expect(resolveTheme(null)).toBe('light')
   })
 
-  it('a saved choice beats the device setting', () => {
-    expect(resolveTheme('light', true)).toBe('light')
-    expect(resolveTheme('dark', false)).toBe('dark')
+  it('a saved choice is kept, light or dark', () => {
+    expect(resolveTheme('light')).toBe('light')
+    expect(resolveTheme('dark')).toBe('dark')
   })
 
   it('ignores a saved value it does not recognise', () => {
-    expect(resolveTheme('sepia', true)).toBe('dark')
-    expect(resolveTheme('', false)).toBe('light')
+    expect(resolveTheme('sepia')).toBe('light')
+    expect(resolveTheme('')).toBe('light')
   })
 
   it('toggles between the two', () => {

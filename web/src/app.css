@@ -407,7 +407,8 @@ main.full { padding: 0; max-width: none; margin: 0; position: relative; min-heig
 .plan-panel.collapsed { display: none; }
 .panel-open { position: absolute; z-index: 10; top: 12px; left: 12px; box-shadow: 0 2px 10px rgb(0 0 0 / 0.35); }
 
-.panel-title { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 14px 14px 0 18px; }
+.panel-title { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; padding: 14px 14px 0 18px; }
+.panel-sub { margin: 4px 0 0; color: var(--muted); font-size: 0.92rem; line-height: 1.4; }
 .panel-title h1 { margin: 0; font-size: 1.25rem; }
 .collapse { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; }
 .collapse:hover { border-color: var(--accent); color: var(--accent); }

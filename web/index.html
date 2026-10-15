@@ -6,11 +6,11 @@
     <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <script>
-      // Same rule as src/lib/theme.ts: a saved choice wins, otherwise follow the device.
+      // Same rule as src/lib/theme.ts: a saved choice wins, otherwise light.
       (function () {
         var t = null;
         try { t = localStorage.getItem('theme'); } catch (e) {}
-        if (t !== 'light' && t !== 'dark') t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        if (t !== 'light' && t !== 'dark') t = 'light';
         document.documentElement.dataset.theme = t;
       })();
     </script>

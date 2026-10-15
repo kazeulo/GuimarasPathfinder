@@ -44,7 +44,7 @@ If `npm install` fails with *"Cannot find native binding"*, see the troubleshoot
 | **How it works** | A plain-language, animated walkthrough of the two methods behind the route, with a collapsed section for technical readers. |
 | **About** | The SP, where the data comes from, and what has and hasn't been verified. |
 
-The site follows your device's light or dark setting, and the button in the top corner switches between them. Your choice is
+The site opens in light mode, and the button in the top corner switches to dark mode and back. Your choice is
 remembered in your browser.
 
 ## How the route is worked out

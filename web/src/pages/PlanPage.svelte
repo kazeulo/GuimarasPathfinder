@@ -131,7 +131,10 @@
 
   <aside class={['plan-panel', { collapsed, dragging: dragH !== null }]} style:--sheet-h="{sheetH}px" aria-label="Trip planner">
     <div class="panel-title">
-      <h1>Plan a day in Guimaras</h1>
+      <div>
+        <h1>Plan a day in Guimaras</h1>
+        <p class="panel-sub">Pick the places you want to see. We&rsquo;ll find a short route and tell you how long it takes.</p>
+      </div>
       <button type="button" class="collapse" onclick={() => (collapsed = true)} aria-label="Hide panel and show the whole map" title="Hide panel">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg>
       </button>
