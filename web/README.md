@@ -33,6 +33,8 @@ src/
   lib/mapMode.svelte.ts  remembers map vs diagram
   lib/sheet.ts       snap heights and flick logic for the phone bottom sheet
   data/roads.json    road shapes from OpenStreetMap (made by scripts/fetch-roads.mjs)
+  data/island.json   the island's coastline (made by scripts/fetch-island.mjs)
+  lib/island.ts      coastline and bounds, used to highlight the island and limit panning
   components/        MapPanel (map/diagram switch), RealMap (Leaflet + OpenStreetMap), MapView (SVG diagram),
                      Matrix, FloydDemo, TourDemo, Directions, ThemeToggle (.svelte)
   pages/             PlanPage, HowPage, AboutPage (.svelte)
@@ -55,6 +57,10 @@ Tests (`npm test`) check the engine against the SP: all 225 distances in Tables 
 ## Troubleshooting
 If `npm install` leaves out a native binding (`Cannot find native binding`, an npm optional-dependency bug), run
 `npm install --no-save @rolldown/binding-win32-x64-msvc@<rolldown version>` (or the binding for your platform).
+
+## Refreshing the map data
+`data/island.json` (the island's coastline, used to highlight it and keep the map focused) was made once by
+`node scripts/fetch-island.mjs`, which asks OpenStreetMap's Overpass API for the outline of Guimaras Island.
 
 ## Refreshing the road shapes
 `data/roads.json` was made once by `node scripts/fetch-roads.mjs`, which asks the public OSRM demo server for the shape of each of the

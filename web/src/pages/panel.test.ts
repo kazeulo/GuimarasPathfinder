@@ -49,7 +49,7 @@ const type = (el: HTMLInputElement, value: string) => {
 const names = () => [...target.querySelectorAll('.places .pname')].map((e) => e.textContent)
 const sheetPx = () => parseFloat(find<HTMLElement>('.plan-panel').style.getPropertyValue('--sheet-h'))
 
-describe('the floating panel', () => {
+describe('the planning panel', () => {
   it('starts on Places, with the Trip tab present but hidden', () => {
     expect(find('#pane-places').hasAttribute('hidden')).toBe(false)
     expect(find('#pane-trip').hasAttribute('hidden')).toBe(true)
@@ -77,11 +77,13 @@ describe('the floating panel', () => {
     expect(names()).toHaveLength(14)
   })
 
-  it('hides and shows the panel on desktop', () => {
+  it('hides and shows the side panel on desktop', () => {
     click(find('.collapse'))
     expect(find('.plan-panel').classList.contains('collapsed')).toBe(true)
+    expect(find('.plan-shell').classList.contains('collapsed')).toBe(true) // the column closes so the map takes the width
     click(find('.panel-open'))
     expect(find('.plan-panel').classList.contains('collapsed')).toBe(false)
+    expect(find('.plan-shell').classList.contains('collapsed')).toBe(false)
     expect(target.querySelector('.panel-open')).toBeNull()
   })
 

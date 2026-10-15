@@ -52,7 +52,7 @@
     setSelected(selected.map((s, k) => (k === i ? !s : s)))
   }
 
-  // ---------- the floating panel ----------
+  // ---------- the planning panel ----------
   type Tab = 'places' | 'trip'
   let tab = $state<Tab>('places')
   let collapsed = $state(false) // desktop: hide the panel to see the whole map
@@ -122,7 +122,7 @@
   })
 </script>
 
-<div class="plan-shell" bind:clientHeight={shellH}>
+<div class={["plan-shell", { collapsed }]} bind:clientHeight={shellH}>
   <MapPanel fill graph={entry.graph} {entry} {overlay} onNodeClick={toggle} />
 
   {#if collapsed}

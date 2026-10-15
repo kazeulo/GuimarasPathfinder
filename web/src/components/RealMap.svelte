@@ -3,6 +3,7 @@
   import type * as Leaflet from 'leaflet'
   import type { Graph } from '../algo/types'
   import { COORDS, placeName, type Entry } from '../data'
+  import { PAN_LIMIT, islandBounds, islandRings } from '../lib/island'
   import { buildPopup } from '../lib/popup'
   import { roadPath, type LatLng } from '../lib/roads'
   import type { Overlay } from './overlay'
@@ -12,7 +13,7 @@
     entry: Entry
     overlay?: Overlay
     onNodeClick?: (i: number) => void
-    fill?: boolean // fills its parent (the Plan page): bigger controls, and room kept clear for the floating panel
+    fill?: boolean // fills its parent (the Plan page): bigger controls, and room kept clear for the phone bottom sheet
   }
 
   let { graph, entry, overlay = {}, onNodeClick, fill = false }: Props = $props()
@@ -24,16 +25,17 @@
   // filled in once Leaflet has loaded; Leaflet is only fetched when a map is actually shown
   let ctx = $state.raw<Ctx | null>(null)
 
-  // In fill mode a panel floats over the map (left on desktop, bottom sheet on phones), so keep places out from under it.
-  const wide = () => window.matchMedia('(min-width: 901px)').matches
+  // On a phone, the bottom sheet slides over the map, so keep the island and popups clear of it.
+  // (On desktop the planning panel is its own column beside the map, so the map has nothing to avoid.)
+  const underSheet = () => fill && window.matchMedia('(max-width: 900px)').matches
   const fitPadding = () =>
-    !fill ? { padding: [28, 28] as [number, number] }
-    : wide() ? { paddingTopLeft: [410, 30] as [number, number], paddingBottomRight: [30, 30] as [number, number] }
-    : { paddingTopLeft: [24, 70] as [number, number], paddingBottomRight: [24, 150] as [number, number] }
+    underSheet()
+      ? { paddingTopLeft: [24, 70] as [number, number], paddingBottomRight: [24, 150] as [number, number] }
+      : { padding: [fill ? 36 : 28, fill ? 36 : 28] as [number, number] }
   const popupPadding = () =>
-    !fill ? { autoPanPadding: [20, 20] as [number, number] }
-    : wide() ? { autoPanPaddingTopLeft: [410, 20] as [number, number], autoPanPaddingBottomRight: [20, 20] as [number, number] }
-    : { autoPanPaddingTopLeft: [20, 70] as [number, number], autoPanPaddingBottomRight: [20, 150] as [number, number] }
+    underSheet()
+      ? { autoPanPaddingTopLeft: [20, 70] as [number, number], autoPanPaddingBottomRight: [20, 150] as [number, number] }
+      : { autoPanPadding: [20, 20] as [number, number] }
 
   const pos = (i: number): LatLng => (i === 0 ? entry.latlng : COORDS[i])
 
@@ -47,6 +49,7 @@
     let disposed = false
     let map: Leaflet.Map | undefined
     let watcher: ResizeObserver | undefined
+    let refocus: (() => void) | undefined
 
     ;(async () => {
       try {
@@ -55,6 +58,7 @@
         const L: typeof Leaflet = (leaflet as unknown as { default?: typeof Leaflet }).default ?? leaflet
 
         map = L.map(el, {
+          zoomSnap: 0.25, // lets the island fill the space instead of snapping to a whole zoom level
           zoomControl: false, // added below, so it can sit bottom-right like Google Maps when the map fills the screen
           scrollWheelZoom: fill, // an inline map must not hijack the page scroll; a full-screen one can zoom
           dragging: fill || !L.Browser.mobile, // inline on a phone: one finger scrolls the page, pinch still zooms
@@ -63,32 +67,67 @@
           maxZoom: 19,
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         }).addTo(map)
-        const everything = L.latLngBounds(COORDS.map((_, i) => pos(i)))
+        const everything = L.latLngBounds(islandBounds)
         map.fitBounds(everything, fitPadding())
 
+        // Keep the screen on Guimaras: fade the sea and the mainland, glow the coast, and stop the map drifting far away.
+        const world: LatLng[] = [[-85, -180], [-85, 180], [85, 180], [85, -180]]
+        L.polygon([world, ...islandRings], { className: 'rl-mask', stroke: false, interactive: false }).addTo(map)
+        L.polygon(islandRings, { className: 'rl-glow', fill: false, interactive: false }).addTo(map)
+        L.polygon(islandRings, { className: 'rl-coast', fill: false, interactive: false }).addTo(map)
+        map.options.maxBoundsViscosity = 1
+
+        // Frame the island, then limit how far the map can zoom out and drift. The limits are sized from the real
+        // viewport, so a wide window never shows empty margins.
+        const world2 = L.latLngBounds([-90, -180], [90, 180])
+        const focus = () => {
+          if (!map) return
+          map.setMinZoom(0)
+          map.setMaxBounds(world2)
+          map.fitBounds(everything, { ...fitPadding(), animate: false })
+          map.setMinZoom(map.getZoom() - 1)
+          const view = map.getBounds()
+          const spanLat = view.getNorth() - view.getSouth()
+          const spanLng = view.getEast() - view.getWest()
+          const c = everything.getCenter()
+          const limit = L.latLngBounds([c.lat - spanLat, c.lng - spanLng], [c.lat + spanLat, c.lng + spanLng])
+          map.setMaxBounds(limit.extend(everything.pad(PAN_LIMIT / Math.max(everything.getNorth() - everything.getSouth(), 0.01))))
+        }
+        focus()
+        refocus = focus
+
         L.control.zoom({ position: fill ? 'bottomright' : 'topleft' }).addTo(map)
-        // "show all places" button, above the zoom buttons
+        // "show the whole island" button, above the zoom buttons
         const showAll = L.Control.extend({
           onAdd() {
             const bar = L.DomUtil.create('div', 'leaflet-bar')
             const a = L.DomUtil.create('a', 'rl-fit', bar) as HTMLAnchorElement
             a.href = '#'
             a.role = 'button'
-            a.title = 'Show all places'
-            a.setAttribute('aria-label', 'Show all places')
+            a.title = 'Show the whole island'
+            a.setAttribute('aria-label', 'Show the whole island')
             a.innerHTML =
               '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>'
             L.DomEvent.disableClickPropagation(bar)
             L.DomEvent.on(a, 'click', (e) => {
               L.DomEvent.preventDefault(e)
-              map?.fitBounds(everything, fitPadding())
+              refocus?.()
             })
             return bar
           },
         })
         new showAll({ position: fill ? 'bottomright' : 'topleft' }).addTo(map)
 
-        watcher = new ResizeObserver(() => map?.invalidateSize())
+        // When the map's width changes (the side panel opens or closes, the phone turns) re-frame the island;
+        // a change in height alone (the on-screen keyboard) must not throw away where the visitor has panned to.
+        let lastWidth = el.clientWidth
+        watcher = new ResizeObserver(() => {
+          map?.invalidateSize()
+          if (Math.abs(el.clientWidth - lastWidth) > 40) {
+            lastWidth = el.clientWidth
+            refocus?.()
+          }
+        })
         watcher.observe(el)
 
         ctx = { L, map, base: L.layerGroup().addTo(map), top: L.layerGroup().addTo(map) }
