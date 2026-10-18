@@ -1,4 +1,4 @@
-import { PLACES, kindOf, photoOf, placeName, type Entry } from '../data'
+import { INFO, PLACES, kindOf, photoOf, placeName, type Entry } from '../data'
 
 export interface PopupOptions {
   chosen: boolean // is the place already part of the trip?
@@ -32,6 +32,26 @@ export function buildPopup(i: number, entry: Entry, { chosen, onToggle }: PopupO
     const hours = place.stay >= 60 ? `${place.stay / 60} h` : `${place.stay} min`
     meta.textContent = `${kindOf(place)} · about ${hours}`
     body.append(meta)
+
+    const info = INFO[i]
+    if (info) {
+      if (info.where) {
+        const where = document.createElement('p')
+        where.className = 'pop-where'
+        where.textContent = info.where
+        body.append(where)
+      }
+      if (info.note) {
+        const note = document.createElement('p')
+        note.className = 'pop-note'
+        note.textContent = info.note
+        body.append(note)
+      }
+      const about = document.createElement('p')
+      about.className = 'pop-about'
+      about.textContent = info.about
+      body.append(about)
+    }
   }
 
   if (onToggle && i > 0) {

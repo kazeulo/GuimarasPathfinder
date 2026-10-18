@@ -27,6 +27,7 @@
 
   // On a phone, the bottom sheet slides over the map, so keep the island and popups clear of it.
   // (On desktop the planning panel is its own column beside the map, so the map has nothing to avoid.)
+  const wide = () => window.matchMedia('(min-width: 901px)').matches
   const underSheet = () => fill && window.matchMedia('(max-width: 900px)').matches
   const fitPadding = () =>
     underSheet()
@@ -188,7 +189,7 @@
       // Clicking a pin opens a card with the place's photo. On the Plan page the card also adds or removes the place.
       const chosen = ['sel', 'visited'].includes(nodeClass[i] ?? '')
       const toggle = onNodeClick && i > 0 ? () => { marker.closePopup(); onNodeClick(i) } : undefined
-      marker.bindPopup(buildPopup(i, entry, { chosen, onToggle: toggle }), { closeButton: true, ...popupPadding(), maxWidth: 260 })
+      marker.bindPopup(buildPopup(i, entry, { chosen, onToggle: toggle }), { closeButton: true, ...popupPadding(), maxWidth: 260, maxHeight: wide() ? 480 : 340 })
       marker.on('popupopen', () => marker.closeTooltip())
       marker.addTo(top)
       marker.getElement()?.setAttribute('aria-label', `${i + 1}. ${placeName(i, entry)}`)

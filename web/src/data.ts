@@ -74,6 +74,79 @@ export const photoOf = (i: number): string | null =>
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-|-$/g, '')}.webp`
 
+// What a visitor wants to know about each place. The SP gives only a category and a typical stay, so these short descriptions
+// were compiled in October 2026 from public sources (travel sites, Wikipedia, the operators' own pages). Where little is
+// published, the text says so instead of guessing. Keyed by index into PLACES.
+export interface PlaceInfo {
+  where?: string // town or barangay
+  about: string
+  note?: string // something to check before going
+}
+
+export const INFO: Record<number, PlaceInfo> = {
+  1: {
+    where: 'Alubihod, Nueva Valencia',
+    about:
+      'A small sandy cove on the southwest coast, with a few resorts along the shore. One of the best-known beaches on the island, and busy with locals on weekends and holidays. Often spelled Alubihod on maps.',
+  },
+  2: {
+    where: 'Nueva Valencia',
+    about: 'A beach on the southwest coast, next to Tahi Beach Resort. Very little is published about it, so check locally for what is available.',
+  },
+  3: {
+    where: 'San Lorenzo',
+    about: 'A farm stop in San Lorenzo. Very little is published about it, so check locally for what is on offer.',
+  },
+  4: {
+    where: 'Jordan',
+    about:
+      'A tiny town plaza right by Jordan Wharf, where ferry passengers from Iloilo arrive. It is billed as one of the smallest plazas in the world, and has a small monument of José Rizal.',
+  },
+  5: {
+    where: 'Near Jordan',
+    about: 'The big GUIMARAS sign beside the road, a quick stop for a photo.',
+  },
+  6: {
+    where: 'Nueva Valencia',
+    about: 'A hilltop resort with a swimming pool and wide views over the sea.',
+  },
+  7: {
+    where: 'Piña, Buenavista',
+    about: 'A resort with rooms, beside the island’s ring road (the Guimaras Circumferential Road).',
+  },
+  8: {
+    where: 'Igang, Nueva Valencia',
+    about:
+      'The Igang Marine Station of SEAFDEC’s Aquaculture Department: a research and training station for fish farming, built on small islets and floating cages joined by walkways.',
+    note: 'Reported closed to tourists since 2018, to protect the breeding fish. Check before you go.',
+  },
+  9: {
+    where: 'San Lorenzo',
+    about:
+      'A working wind farm of 27 turbines, each about 80 m tall. It started operating in 2014 and was the first wind farm in the Visayas.',
+  },
+  10: {
+    where: 'San Enrique, San Lorenzo',
+    about: 'A beach resort with a private beach, snorkelling and hiking trails.',
+  },
+  11: {
+    where: 'Sibunag',
+    about: 'A nature stop listed as a resort, also known as the Rogate Center of Pastoral Care for Vocations.',
+  },
+  12: {
+    where: 'San Miguel, Jordan',
+    about:
+      'Our Lady of the Philippines Trappist Abbey, a working monastery founded in 1972 on 75 hectares of donated land. It has a retreat house, and the gift shop sells local products, especially mango snacks.',
+  },
+  13: {
+    about: 'A resort with ocean views. No independent listing was found when this site was made, so check locally before you go.',
+  },
+  14: {
+    where: 'San Miguel, Jordan',
+    about: 'The original Pitstop restaurant, known for its mango pizza and other mango dishes.',
+  },
+}
+
 export const PLACES: Place[] = [
   { n: 1, name: null, cat: 'Entry point', stay: 0 },
   { n: 2, name: 'Alobijod Beach Cove', cat: 'Sun and Beach', stay: 120 },

@@ -54,6 +54,11 @@
         <strong>Time at each place:</strong> the authors&rsquo; estimate for each type of place.
       </li>
       <li>
+        <strong>About each place:</strong> the short descriptions on the map were compiled in October 2026 from public sources such as
+        travel sites, Wikipedia and the operators&rsquo; own pages. The SP itself doesn&rsquo;t describe the places, so these may be out of date.
+        Please check locally before you go.
+      </li>
+      <li>
         <strong>Vehicle prices:</strong> collected from local drivers for the SP.
       </li>
     </ul>

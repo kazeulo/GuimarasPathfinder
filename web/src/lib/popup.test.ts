@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 import { describe, expect, it, vi } from 'vitest'
-import { ENTRIES } from '../data'
+import { ENTRIES, INFO, PLACES } from '../data'
 import { buildPopup } from './popup'
 
 const entry = ENTRIES.wharf
@@ -47,5 +47,34 @@ describe('pin popup', () => {
   it('uses plain text for names, so a name can never inject markup', () => {
     const el = buildPopup(6, entry, { chosen: false }) // Bikers' Hill, contains an apostrophe
     expect(el.querySelector('.pop-name')!.textContent).toBe("Bikers' Hill")
+  })
+
+  it('tells you where the place is and what it is', () => {
+    const el = buildPopup(12, entry, { chosen: false }) // the Trappist abbey
+    expect(el.querySelector('.pop-where')!.textContent).toBe('San Miguel, Jordan')
+    expect(el.querySelector('.pop-about')!.textContent).toContain('Trappist Abbey')
+  })
+
+  it('warns that SEAFDEC has been closed to tourists', () => {
+    const el = buildPopup(8, entry, { chosen: false })
+    expect(el.querySelector('.pop-note')!.textContent).toContain('closed to tourists')
+  })
+
+  it('leaves out the location line when it is not known, and shows no warning when there is none', () => {
+    const el = buildPopup(13, entry, { chosen: false }) // Sunrise Valley: no independent listing found
+    expect(el.querySelector('.pop-where')).toBeNull()
+    expect(el.querySelector('.pop-note')).toBeNull()
+    expect(el.querySelector('.pop-about')!.textContent).toContain('check locally')
+  })
+})
+
+describe('place information', () => {
+  it('every destination has a description, and the port has none', () => {
+    expect(INFO[0]).toBeUndefined()
+    for (let i = 1; i < PLACES.length; i++) expect(INFO[i]?.about.length, PLACES[i].name!).toBeGreaterThan(30)
+  })
+
+  it('only describes places that exist', () => {
+    for (const key of Object.keys(INFO)) expect(Number(key)).toBeLessThan(PLACES.length)
   })
 })
