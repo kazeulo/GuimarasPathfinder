@@ -60,9 +60,12 @@ describe('pin popup', () => {
     expect(el.querySelector('.pop-note')!.textContent).toContain('closed to tourists')
   })
 
-  it('leaves out the location line when it is not known, and shows no warning when there is none', () => {
-    const el = buildPopup(13, entry, { chosen: false }) // Sunrise Valley: no independent listing found
-    expect(el.querySelector('.pop-where')).toBeNull()
+  it('gives every place the barangay and town from the SP, and a warning only where one is needed', () => {
+    for (let i = 1; i < PLACES.length; i++) expect(INFO[i].where, PLACES[i].name!).toMatch(/, /)
+    expect(INFO[13].where).toBe('Cabano, San Lorenzo') // Sunrise Valley
+    expect(INFO[3].where).toBe('Cabano, San Lorenzo') // Reyley
+    const el = buildPopup(13, entry, { chosen: false })
+    expect(el.querySelector('.pop-where')!.textContent).toBe('Cabano, San Lorenzo')
     expect(el.querySelector('.pop-note')).toBeNull()
     expect(el.querySelector('.pop-about')!.textContent).toContain('check locally')
   })

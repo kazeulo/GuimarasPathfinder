@@ -107,6 +107,22 @@ describe('About page', () => {
     expect(body).toContain('This website is not verified.')
   })
 
+  it('tells the story of the SP: why, what it set out to do, how, what it found', () => {
+    const { body } = render(AboutPage, { props: {} })
+    for (const heading of ['Why it was done', 'What it set out to do', 'How it was done', 'What it found']) expect(body).toContain(heading)
+    expect(body).toContain('about 165,000') // visitors in 2021
+    expect(body).toContain('118.85 km')
+    expect(body).toContain('clearly not possible for a same-day visitor')
+  })
+
+  it('credits the authors and advisers, and says the site follows the SP’s own recommendation', () => {
+    const { body } = render(AboutPage, { props: {} })
+    expect(body).toContain('Bernardo')
+    expect(body).toContain('Marierose R. Chavez')
+    expect(body).toContain('This site follows that recommendation')
+    expect(body).toContain('suits a small number of places')
+  })
+
   it('explains why every trip starts at Jordan Wharf', () => {
     const { body } = render(AboutPage, { props: {} })
     expect(body).toContain('Where trips start')

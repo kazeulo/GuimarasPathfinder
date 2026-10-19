@@ -483,3 +483,11 @@ main.full { padding: 0; max-width: none; margin: 0; position: relative; min-heig
 .tl-x:hover { border-color: var(--warm); color: var(--warm); }
 .when .hrs { display: flex; flex-direction: row; align-items: center; gap: 8px; margin-top: 8px; font-size: 0.85rem; color: var(--muted); }
 .hrs input { width: 5rem; min-height: 38px; padding: 0 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); }
+
+/* About page: key figures */
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin: 26px 0 0; }
+.facts > div { background: var(--surface-2); border-radius: 12px; padding: 12px 14px; }
+.facts dt { font-size: 0.78rem; color: var(--muted); }
+.facts dd { margin: 2px 0 0; font-family: var(--serif); font-size: 1.45rem; font-weight: 700; color: var(--accent); line-height: 1.2; }
+.facts dd.sub { font-family: inherit; font-size: 0.8rem; font-weight: 400; color: var(--muted); }
+ol.plain { padding-left: 1.4rem; }
