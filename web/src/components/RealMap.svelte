@@ -189,7 +189,7 @@
       // Clicking a pin opens a card with the place's photo. On the Plan page the card also adds or removes the place.
       const chosen = ['sel', 'visited'].includes(nodeClass[i] ?? '')
       const toggle = onNodeClick && i > 0 ? () => { marker.closePopup(); onNodeClick(i) } : undefined
-      marker.bindPopup(buildPopup(i, entry, { chosen, onToggle: toggle }), { closeButton: true, ...popupPadding(), maxWidth: 260, maxHeight: wide() ? 480 : 340 })
+      marker.bindPopup(buildPopup(i, entry, { chosen, onToggle: toggle }), { closeButton: true, ...popupPadding(), maxWidth: 360, maxHeight: wide() ? 520 : 340 })
       marker.on('popupopen', () => marker.closeTooltip())
       marker.addTo(top)
       marker.getElement()?.setAttribute('aria-label', `${i + 1}. ${placeName(i, entry)}`)
