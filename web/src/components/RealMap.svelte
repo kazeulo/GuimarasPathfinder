@@ -14,9 +14,11 @@
     overlay?: Overlay
     onNodeClick?: (i: number) => void
     fill?: boolean // fills its parent (the Plan page): bigger controls, and room kept clear for the phone bottom sheet
+    highlight?: number | null // a place to pick out (the one under the mouse in the list)
+    focusRequest?: { i: number; n: number } | null // "fly to this place and open its card"; a new `n` asks again
   }
 
-  let { graph, entry, overlay = {}, onNodeClick, fill = false }: Props = $props()
+  let { graph, entry, overlay = {}, onNodeClick, fill = false, highlight = null, focusRequest = null }: Props = $props()
 
   type Ctx = { L: typeof Leaflet; map: Leaflet.Map; base: Leaflet.LayerGroup; top: Leaflet.LayerGroup }
 
@@ -24,6 +26,8 @@
   let failed = $state(false)
   // filled in once Leaflet has loaded; Leaflet is only fetched when a map is actually shown
   let ctx = $state.raw<Ctx | null>(null)
+  // the pins currently on the map, by place index; replaced whenever the pins are redrawn
+  let markers = $state.raw<Leaflet.Marker[]>([])
 
   // On a phone, the bottom sheet slides over the map, so keep the island and popups clear of it.
   // (On desktop the planning panel is its own column beside the map, so the map has nothing to avoid.)
@@ -160,6 +164,7 @@
     const { L, top } = ctx
     const { segments = [], nodeClass = {}, badges = {}, labels = [] } = overlay
     top.clearLayers()
+    const made: Leaflet.Marker[] = []
     // Names stay on screen only when a page highlights a few places; with many, they would overlap, so they show on hover or tap.
     const showNames = labels.length <= 3
 
@@ -193,6 +198,43 @@
       marker.on('popupopen', () => marker.closeTooltip())
       marker.addTo(top)
       marker.getElement()?.setAttribute('aria-label', `${i + 1}. ${placeName(i, entry)}`)
+      made.push(marker)
+    }
+    markers = made
+  })
+
+  // Pick out one pin (the place being pointed at in the list). This only changes a class, so it never redraws the map
+  // and an open card stays open.
+  $effect(() => {
+    const list = markers
+    const target = highlight
+    list.forEach((m, i) => {
+      const on = i === target
+      m.getElement()?.classList.toggle('hl', on)
+      m.setZIndexOffset(on ? 1000 : 0)
+    })
+  })
+
+  // Clicking a place in the list: glide to its pin, then open its card.
+  let lastFocus = 0
+  $effect(() => {
+    const req = focusRequest
+    if (!req || !ctx || req.n === lastFocus) return
+    const marker = markers[req.i]
+    if (!marker) return
+    lastFocus = req.n
+    const { map } = ctx
+    const at = marker.getLatLng()
+    const zoom = Math.max(map.getZoom(), 12.5)
+    const open = () => {
+      if (!marker.isPopupOpen()) marker.openPopup()
+    }
+    if (map.distance(map.getCenter(), at) < 30 && map.getZoom() >= zoom - 0.1) {
+      open() // already there
+    } else {
+      map.once('moveend', open)
+      map.flyTo(at, zoom, { duration: 0.7 })
+      setTimeout(open, 1500) // in case the browser skips the animation
     }
   })
 </script>

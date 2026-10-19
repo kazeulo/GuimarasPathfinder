@@ -69,7 +69,7 @@
     {/if}
   </main>
 
-  <!-- the Plan page is a full-screen map; its GitHub link lives at the bottom of the panel instead -->
+  <!-- the Plan page is a full-screen map with no footer; its GitHub link is at the bottom of the panel instead -->
   {#if page !== 'plan'}
     <footer class="site-foot">
       <a href={REPO_URL} target="_blank" rel="noopener noreferrer">

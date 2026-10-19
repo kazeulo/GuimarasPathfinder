@@ -10,9 +10,10 @@
     overlay?: Overlay
     onNodeClick?: (i: number) => void
     fill?: boolean
+    highlight?: number | null
   }
 
-  let { graph, entry, overlay = {}, onNodeClick, fill = false }: Props = $props()
+  let { graph, entry, overlay = {}, onNodeClick, fill = false, highlight = null }: Props = $props()
 
   const R = 8.5
   let weights = $state(false)
@@ -64,7 +65,7 @@
         {@const left = x > 600}
         <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
         <g
-          class="node {i === 0 ? 'port' : ''} {nodeClass[i] ?? ''}"
+          class="node {i === 0 ? 'port' : ''} {nodeClass[i] ?? ''} {highlight === i ? 'hl' : ''}"
           transform="translate({x} {y})"
           role={onNodeClick ? 'button' : undefined}
           tabindex={onNodeClick ? 0 : undefined}

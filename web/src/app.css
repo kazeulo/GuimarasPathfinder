@@ -59,7 +59,7 @@ h3.mini { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; 
 .app { min-height: 100vh; display: flex; flex-direction: column; }
 .site-head {
   position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 10px max(16px, calc((100vw - 1200px) / 2)); background: color-mix(in srgb, var(--bg) 88%, transparent);
+  padding: 10px 16px; background: color-mix(in srgb, var(--bg) 88%, transparent);
   backdrop-filter: blur(8px); border-bottom: 1px solid var(--border);
 }
 .brand { display: inline-flex; align-items: center; gap: 10px; font-family: var(--serif); font-size: 1.25rem; font-weight: 700; color: var(--text); text-decoration: none; }
@@ -124,12 +124,15 @@ button:disabled { opacity: 0.45; cursor: default; }
 /* ---------- plan page ---------- */
 
 .places { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; }
-.places label {
-  display: grid; grid-template-columns: 22px 1fr; column-gap: 10px; align-items: start; padding: 10px 12px; cursor: pointer;
-  border: 1px solid var(--border); border-radius: 12px; background: var(--surface); height: 100%;
+.prow {
+  display: grid; grid-template-columns: 22px 1fr; column-gap: 10px; align-items: start; padding: 10px 12px;
+  border: 1px solid var(--border); border-radius: 12px; background: var(--surface);
 }
-.places label.on { border-color: var(--accent); background: var(--accent-soft); }
-.places input { grid-row: span 2; margin-top: 3px; width: 18px; height: 18px; accent-color: var(--accent); }
+.prow:hover { border-color: var(--accent); }
+.prow.on { border-color: var(--accent); background: var(--accent-soft); }
+.prow input { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
+.pbody .pname, .pbody .pmeta { display: block; }
+.pbody { display: block; width: 100%; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
 .pname { font-weight: 600; line-height: 1.25; }
 .pmeta { color: var(--muted); font-size: 0.82rem; }
 
@@ -264,7 +267,7 @@ button:disabled { opacity: 0.45; cursor: default; }
 .notice .plain { margin: 0 0 8px; }
 .notice p { margin: 0; }
 
-.site-foot { border-top: 1px solid var(--border); padding: 16px max(16px, calc((100vw - 1200px) / 2)); font-size: 0.88rem; }
+.site-foot { border-top: 1px solid var(--border); padding: 16px; font-size: 0.88rem; }
 
 .hire { margin: 0 0 14px; padding: 12px 14px; border-radius: 12px; background: var(--surface-2); }
 .hire h3.mini { margin-bottom: 6px; }
@@ -468,3 +471,15 @@ main.full { padding: 0; max-width: none; margin: 0; position: relative; min-heig
   .plan-panel { position: static; grid-column: 1; grid-row: 1; width: auto; min-width: 0; border-width: 0 1px 0 0; border-radius: 0; box-shadow: none; }
   .map-wrap.fill .map > svg { width: 100%; margin-left: 0; }
 }
+
+/* the place being pointed at in the list stands out on the map */
+.pin { transition: transform 0.12s ease, box-shadow 0.12s ease; }
+.pin-wrap.hl .pin { transform: scale(1.4); border-color: var(--warm); box-shadow: 0 0 0 5px color-mix(in srgb, var(--warm) 45%, transparent), 0 1px 4px rgb(0 0 0 / 0.35); }
+.node.hl circle, .node.hl rect { stroke: var(--warm); stroke-width: 3.5; }
+
+/* remove a stop right in the timeline; type any number of hours */
+.tl-line { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.tl-x { flex: none; width: 28px; height: 28px; margin-top: -3px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); color: var(--muted); font-size: 0.8rem; line-height: 1; cursor: pointer; }
+.tl-x:hover { border-color: var(--warm); color: var(--warm); }
+.when .hrs { display: flex; flex-direction: row; align-items: center; gap: 8px; margin-top: 8px; font-size: 0.85rem; color: var(--muted); }
+.hrs input { width: 5rem; min-height: 38px; padding: 0 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); }

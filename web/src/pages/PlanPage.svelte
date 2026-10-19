@@ -23,7 +23,9 @@
   ]
   const START_TIMES = Array.from({ length: 13 }, (_, i) => 5 * 60 + i * 60) // 5 AM .. 5 PM
 
-  let hours = $state(10)
+  // the hours the visitor has: a preset button, or any number typed in the box
+  let hoursInput = $state<number | undefined>(10)
+  const hours = $derived(hoursInput && hoursInput > 0 ? Math.min(hoursInput, 72) : 10)
   let startMin = $state(8 * 60)
   let query = $state('')
 
@@ -46,6 +48,14 @@
     const q = query.trim().toLowerCase()
     return q ? byDistance.filter(({ p }) => p.name!.toLowerCase().includes(q) || kindOf(p).toLowerCase().includes(q)) : byDistance
   })
+
+  // ---------- linking the list and the map ----------
+  let hoverIdx = $state<number | null>(null) // the place under the mouse (or keyboard focus) in the list
+  let focusReq = $state<{ i: number; n: number } | null>(null)
+  const focusPlace = (i: number) => {
+    focusReq = { i, n: (focusReq?.n ?? 0) + 1 }
+    if (isPhone()) snap = 'peek' // tuck the sheet down so the map and the card are in view
+  }
 
   const toggle = (i: number) => {
     if (i === 0) return
@@ -123,7 +133,7 @@
 </script>
 
 <div class={["plan-shell", { collapsed }]} bind:clientHeight={shellH}>
-  <MapPanel fill graph={entry.graph} {entry} {overlay} onNodeClick={toggle} />
+  <MapPanel fill graph={entry.graph} {entry} {overlay} onNodeClick={toggle} highlight={hoverIdx} focusRequest={focusReq} />
 
   {#if collapsed}
     <button type="button" class="panel-open btn" onclick={() => (collapsed = false)}>Show places &amp; trip</button>
@@ -182,15 +192,24 @@
           <button type="button" class="chip ghost" onclick={() => setSelected(selectionOf([]))} disabled={count === 0}>Clear</button>
         </div>
 
-        <p class="muted small">Tap places here or on the map. Listed from nearest to farthest from {entry.label}.</p>
+        <p class="muted small">Tick a box to add a place; tap a name to see it on the map. Listed from nearest to farthest from {entry.label}.</p>
         <ul class="places">
           {#each shown as { p, i } (i)}
-            <li>
-              <label class={{ on: selected[i] }}>
-                <input type="checkbox" checked={selected[i]} onchange={() => toggle(i)} />
-                <span class="pname">{p.name}</span>
-                <span class="pmeta">{fmtNum(fw.dist[0][i])} km away · {kindOf(p)} · <span class="nowrap">about {duration(p.stay)}</span></span>
-              </label>
+            <li onmouseenter={() => (hoverIdx = i)} onmouseleave={() => (hoverIdx = null)}>
+              <div class={['prow', { on: selected[i] }]}>
+                <input type="checkbox" checked={selected[i]} onchange={() => toggle(i)} aria-label={`Add ${p.name} to your trip`} />
+                <button
+                  type="button"
+                  class="pbody"
+                  onclick={() => focusPlace(i)}
+                  onfocus={() => (hoverIdx = i)}
+                  onblur={() => (hoverIdx = null)}
+                  title="Show on the map"
+                >
+                  <span class="pname">{p.name}</span>
+                  <span class="pmeta">{fmtNum(fw.dist[0][i])} km away · {kindOf(p)} · <span class="nowrap">about {duration(p.stay)}</span></span>
+                </button>
+              </div>
             </li>
           {:else}
             <li class="muted">No places match &ldquo;{query}&rdquo;.</li>
@@ -221,11 +240,15 @@
               <span>Time you have</span>
               <div class="chips tight">
                 {#each HOURS as o (o.h)}
-                  <button type="button" class={['chip', { on: hours === o.h }]} onclick={() => (hours = o.h)}>
+                  <button type="button" class={['chip', { on: hoursInput === o.h }]} onclick={() => (hoursInput = o.h)}>
                     {o.label} · {o.h} h
                   </button>
                 {/each}
               </div>
+              <label class="hrs">
+                or type your own
+                <input type="number" min="1" max="72" step="0.5" inputmode="decimal" bind:value={hoursInput} aria-label="Hours you have" /> hours
+              </label>
             </div>
           </div>
 
@@ -251,7 +274,10 @@
                   {#if leg.isReturn}
                     Back at {entry.label}
                   {:else}
-                    <b>{placeName(leg.to, entry)}</b>
+                    <span class="tl-line">
+                      <b>{placeName(leg.to, entry)}</b>
+                      <button type="button" class="tl-x" onclick={() => toggle(leg.to)} aria-label={`Remove ${placeName(leg.to, entry)} from your trip`} title="Remove from trip">✕</button>
+                    </span>
                     <small>stay about {duration(leg.stayMin)}, <span class="nowrap">leave {clock(leg.leave)}</span></small>
                   {/if}
                 </span>
