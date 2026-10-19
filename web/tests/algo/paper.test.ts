@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { ENTRIES } from '../data'
-import { engine } from './index'
+import { ENTRIES } from '../../src/data'
+import { engine } from '../../src/algo/index'
 
 // Table 4.1 of the SP (Jordan Wharf as the port), transcribed from the PDF.
 const TABLE_4_1: number[][] = [

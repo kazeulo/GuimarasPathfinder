@@ -1,11 +1,11 @@
 import { render } from 'svelte/server'
 import { describe, expect, it } from 'vitest'
-import { engine } from '../algo'
-import { ENTRIES, PRESETS, selectionOf, type EntryKey } from '../data'
-import type { Model } from '../model'
-import AboutPage from './AboutPage.svelte'
-import HowPage from './HowPage.svelte'
-import PlanPage from './PlanPage.svelte'
+import { engine } from '../../src/algo'
+import { ENTRIES, PRESETS, selectionOf, type EntryKey } from '../../src/data'
+import type { Model } from '../../src/model'
+import AboutPage from '../../src/pages/AboutPage.svelte'
+import HowPage from '../../src/pages/HowPage.svelte'
+import PlanPage from '../../src/pages/PlanPage.svelte'
 
 const model = (entryKey: EntryKey): Model => ({
   entryKey,

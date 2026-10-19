@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { engine } from '../algo'
-import { ENTRIES, PRESETS, selectionOf } from '../data'
-import { buildSchedule, clock, duration, planTour } from './trip'
+import { engine } from '../../src/algo'
+import { ENTRIES, PRESETS, selectionOf } from '../../src/data'
+import { buildSchedule, clock, duration, planTour } from '../../src/lib/trip'
 
 const fw = engine.floydWarshall(ENTRIES.wharf.graph)
 

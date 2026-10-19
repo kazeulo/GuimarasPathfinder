@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { ENTRIES, PLACES } from '../data'
-import { formatMinutes, reconstructPath, toMinutes } from './helpers'
-import { engine } from './index'
+import { ENTRIES, PLACES } from '../../src/data'
+import { formatMinutes, reconstructPath, toMinutes } from '../../src/algo/helpers'
+import { engine } from '../../src/algo/index'
 
 const all = Array.from({ length: 15 }, (_, i) => i)
 const r2 = (x: number) => Math.round(x * 100) / 100

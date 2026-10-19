@@ -39,6 +39,7 @@ src/
                      Matrix, FloydDemo, TourDemo, Directions, ThemeToggle (.svelte)
   pages/             PlanPage, HowPage, AboutPage (.svelte)
   App.svelte         page switching (#plan, #how, #about) and shared trip state
+tests/               all the automated tests, in folders that mirror src/ (algo, components, lib, pages)
 ```
 
 Everything under `algo/` and `lib/` is plain TypeScript with no framework in it, so it can be reused or replaced independently

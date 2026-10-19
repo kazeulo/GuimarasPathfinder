@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { COORDS, ENTRIES } from '../data'
-import { roadCount, roadPath } from './roads'
+import { COORDS, ENTRIES } from '../../src/data'
+import { roadCount, roadPath } from '../../src/lib/roads'
 
 const km = ([la1, lo1]: [number, number], [la2, lo2]: [number, number]) => {
   const rad = (d: number) => (d * Math.PI) / 180

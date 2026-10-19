@@ -1,7 +1,7 @@
 import { render } from 'svelte/server'
 import { describe, expect, it } from 'vitest'
-import ThemeToggle from '../components/ThemeToggle.svelte'
-import { nextTheme, resolveTheme } from './theme'
+import ThemeToggle from '../../src/components/ThemeToggle.svelte'
+import { nextTheme, resolveTheme } from '../../src/lib/theme'
 
 describe('choosing the theme', () => {
   it('opens in light mode when nothing has been saved', () => {

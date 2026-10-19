@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { existsSync, statSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { PLACES, photoOf } from './data'
+import { PLACES, photoOf } from '../src/data'
 
 const file = (i: number) => `public${photoOf(i)!.replace(/^\/?/, '/')}`
 

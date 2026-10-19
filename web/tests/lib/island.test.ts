@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { COORDS, ENTRIES } from '../data'
-import { PAN_LIMIT, islandBounds, islandRings, type LatLng } from './island'
+import { COORDS, ENTRIES } from '../../src/data'
+import { PAN_LIMIT, islandBounds, islandRings, type LatLng } from '../../src/lib/island'
 
 const insideRing = ([lat, lng]: LatLng, ring: LatLng[]) => {
   let inside = false

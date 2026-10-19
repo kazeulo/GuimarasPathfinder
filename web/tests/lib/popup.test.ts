@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import { describe, expect, it, vi } from 'vitest'
-import { ENTRIES, INFO, PLACES } from '../data'
-import { buildPopup } from './popup'
+import { ENTRIES, INFO, PLACES } from '../../src/data'
+import { buildPopup } from '../../src/lib/popup'
 
 const entry = ENTRIES.wharf
 

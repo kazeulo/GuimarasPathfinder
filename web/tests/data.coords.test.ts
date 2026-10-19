@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { COORDS, ENTRIES, PLACES } from './data'
+import { COORDS, ENTRIES, PLACES } from '../src/data'
 
 // Straight-line distance in km between two [lat, lng] points.
 const km = ([la1, lo1]: [number, number], [la2, lo2]: [number, number]) => {

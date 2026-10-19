@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { PEEK_PX, clamp, nearestSnap, nextSnap, prevSnap, sheetHeights } from './sheet'
+import { PEEK_PX, clamp, nearestSnap, nextSnap, prevSnap, sheetHeights } from '../../src/lib/sheet'
 
 describe('bottom sheet heights', () => {
   it('peeks at a fixed height and opens to half and most of the screen', () => {

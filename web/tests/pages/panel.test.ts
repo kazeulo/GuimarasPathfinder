@@ -1,11 +1,11 @@
 // @vitest-environment happy-dom
 import { flushSync, mount, unmount } from 'svelte'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { engine } from '../algo'
-import { ENTRIES, PRESETS, selectionOf } from '../data'
-import { setMapMode } from '../lib/mapMode.svelte'
-import type { Model } from '../model'
-import PlanPage from './PlanPage.svelte'
+import { engine } from '../../src/algo'
+import { ENTRIES, PRESETS, selectionOf } from '../../src/data'
+import { setMapMode } from '../../src/lib/mapMode.svelte'
+import type { Model } from '../../src/model'
+import PlanPage from '../../src/pages/PlanPage.svelte'
 
 const model: Model = { entryKey: 'wharf', entry: ENTRIES.wharf, fw: engine.floydWarshall(ENTRIES.wharf.graph) }
 
